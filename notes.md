@@ -6,8 +6,8 @@ Note:
 1. Repeated calls (e.g., using a loop) to your `get_next_line()` should let you read the text file pointed to by the file descriptor, one line at a time. 
 2. `get_next_line()` should return the line that was read, otherwise `NULL` if there is nothing else to read, or an error occured. 
     - The returned line should include the terminating `\n` character, except if the end of the file was reached and does not end with a `\n`.
-          - Try to read as little as possible each time `get_next_line()` is called (don't read the whole file and then process each line). 
-          - If you encounter a new line `\n`, you have to return the current line.
+      - Try to read as little as possible each time `get_next_line()` is called (don't read the whole file and then process each line). 
+      - If you encounter a new line `\n`, you have to return the current line.
 3. `get_next_line()` should work both when reading a file, and when reading from the standard input.
 4. The header file `get_next_line.h` must contain the prototype of `get_next_line()`.
 5. Add all needed helper functions in the `get_next_line_utils.c` file.
@@ -40,9 +40,9 @@ Bonus part:
    - This means, you should be able to call `get_next_line()` to read from fd 3, then fd 4, then fd 5, then once again 3, 4, and so forth.
 3. Append the `_bonus.[c\h]` suffix to the bonus part files.
    - In addition to the mandatory part files, you will turn in the 3 following files:
-         - `get_next_line_bonus.c`
-         - `get_next_line_utils_bonus.c`
-         - `get_next_line_bonus.h`
+       - `get_next_line_bonus.c`
+       - `get_next_line_utils_bonus.c`
+       - `get_next_line_bonus.h`
 
 
 Structure of directories/files:
@@ -58,21 +58,21 @@ get_next_line/
 Learn:
 1. Static Variables
 2. File descriptors and File I/O functions:
-       - `open()`
-       - `read()`
-       - `close()`
-       - These functions will help you read from the file descriptor provided.
+    - `open()`
+    - `read()`
+    - `close()`
+    - These functions will help you read from the file descriptor provided.
 4. String manipulation functions:
-       - `strchr()`
-       - `strlen()`
-       - `strncpy()`
-       - `strdup()`
-       - These functions manipulate the strings read from the file descriptor and return the lines as required.
+    - `strchr()`
+    - `strlen()`
+    - `strncpy()`
+    - `strdup()`
+    - These functions manipulate the strings read from the file descriptor and return the lines as required.
 5. Dynamic memory allocation:
-       - `malloc()`
-       - `realloc()` 
-       - `free()`
-       - These functions will help you manage memory for the lines read from the file descriptor. 
+    - `malloc()`
+    - `realloc()` 
+    - `free()`
+    - These functions will help you manage memory for the lines read from the file descriptor. 
 7. The `-D BUFFER_SIZE` flag
 
 
