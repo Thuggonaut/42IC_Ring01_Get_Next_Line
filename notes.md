@@ -24,7 +24,7 @@ Note:
 
 Forbidden:
 - Your libft library
-- `lseek()
+- `lseek()`
 - Global variables
 
 
