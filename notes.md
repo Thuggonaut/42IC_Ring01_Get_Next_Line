@@ -73,8 +73,9 @@ Learn:
     - `realloc()` 
     - `free()`
     - These functions will help you manage memory for the lines read from the file descriptor. 
-7. The `-D BUFFER_SIZE` flag
+6. The `-D BUFFER_SIZE` flag
 
 
-
+1. STATIC VARIABLES:
+   a. 
 
