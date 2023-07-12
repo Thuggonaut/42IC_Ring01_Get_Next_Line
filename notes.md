@@ -127,6 +127,7 @@ int main()
     return (0);
 }
 ```
+
 	⁃	In this example, the `count` variable is declared as a `static integer` inside the `countFunctionCalls` function. 
 	⁃	Each time the function is called, `count` is incremented by one and its updated value is printed to the console. 
 	⁃	Because `count` is a static variable, it retains its value between function calls, allowing it to track the total number of times `countFunctionCalls` is called during the program's execution.
@@ -135,6 +136,7 @@ int main()
 	⁃	A static global variable is declared outside the main function and can be used anywhere inside the program, whereas a static local variable is declared inside a function or a block and can only be used within the scope in which it is declared.
 	⁃	A static global variable is not accessible outside the program. 
 	f.	Example of both a static global variable and a static local variable:
+ 
 ```
 #include <stdio.h>
 
