@@ -195,6 +195,7 @@ int main()
     return 0;
 }
 ```
+
 	⁃	In the above example, the `global_static_var` is a `global static` variable declared in file1.c. 
 	⁃	It can be accessed by the `func1` function in the same file, but cannot be accessed by the `func2` function in `file2.c`.
 
@@ -204,6 +205,7 @@ int main()
 	⁃	Static variables are stored in the `.BSS (Block Started by Symbol) segment` for non-initialized static variables and `.DATA segment` for initialized static variables. The actual storage location of the data will be implementation dependent.
 
 For instance, the following code examples illustrate how static variables are allocated in memory:
+
 
 ```
 int main(int argc, char * argv[])
@@ -217,7 +219,9 @@ text     data     bss   dec    hex   filename
 1056     252      8     1316   524   a.out
 ```
 
+
 When we declare a static variable `i` inside the main function:
+
 ```
 int main(int argc, char * argv[])
 {
@@ -231,7 +235,9 @@ text       data     bss   dec     hex   filename
 1056     252      12    1316   524   a.out
 ```
 
+
 And when we initialize the static variable `i` with a value:
+
 ```
 int main(int argc, char * argv[])
 {
@@ -244,6 +250,7 @@ int main(int argc, char * argv[])
 text     data     bss   dec    hex   filename
 1056     256      8     1316   524   a.out
 ```
+
 	⁃	From the above examples, we can see that the size of the `.bss` segment increased when we declared a non-initialized static variable and the size of the `.data segment` increased when we declared an initialized static variable.
 	⁃	The static memory allocation is applied to global variables, file scope variables, and those variables that are declared as static. 
 	⁃	In static memory allocation, memory is allocated at compile time and cannot be changed after allocation.
