@@ -15,7 +15,7 @@ Note:
     - It will define the buffer size for `read()`.
     - The buffer size value will be modified by Moulinette to test your code.
     - This project must be able to compile with and without the `-D BUFFER_SIZE` flag in addition to the usual flags. You can choose the default value of your choice.
-7. Compile you code as follows (e.g. with a buffer size of 42):
+7. Compile your code as follows (e.g. with a buffer size of 42):
    `cc -Wall -Wextra -Werror -D Buffer_size=42 <files>.c`
 8. `get_next_line()` will be considered as having an undefined behaviour if the file pointed to by the file descriptor changed since the last call whereas `read()` didn't reach the end of the file.
 9. `get_next_line()` will also be considered as having an undefined behaviour when reading a binary file.
@@ -281,8 +281,45 @@ text     data     bss   dec    hex   filename
 	⁃	A successful read() updates the access time for the file.
 	⁃	Prototype: `ssize_t read(int fd, void *buf, size_t cnt);`
 	⁃	Here, `fd` is the file descriptor from which to read, `buf` is the buffer into which to read, and `cnt` is the number of bytes to read.
+	⁃	`read()` returns a `ssize_t` which is an integer. 
+	⁃	We send it a file descriptor, which is an integer.
+	⁃	We send it a pointer of type `void` which is a buffer.
+	⁃	We send it a second `size_t` which is a number of bytes. 
+	⁃	So, `read()` will read from a file, then store what it read in a variable. 
+	⁃	On objects capable of seeking, the `read()` starts at a position given by the pointer associated with `fd`.
+	⁃	Upon return from `read()`, the pointer is incremented by the number of bytes actually read. 
+	⁃	So, when you call it for the first time on a file, the pointer will be positioned right before the first character of that file. 
+	⁃	Then, you tell it to “read n bytes”, and say, `n = 5`, and it’ll read 5 bytes of characters, while advancing the pointer five bytes forward. 
+	⁃	Then, you tell it to “store the 5 characters read in the buffer I’ve sent you”, and it’ll store them in the buffer. 
+	⁃	Finally, it returns the number of bytes it successfully read. 
+	⁃	Calling `read()` again on the same file that was just read, it’ll remember the position of the pointer which will be where it last read from, as it’s associated with the file descriptor. 
+	⁃	So, the pointer stays where it last was, at the end of the first call, and up calling it again it’ll know what it’s already read. 
+	⁃	We tell it to read 5 bytes again, and it’ll read 5 bytes then increment the pointer 5 bytes forward again. Then it’ll store 5 bytes of characters read in the buffer, and return `5` to indicate it’s successfully read 5 bytes. 
+	⁃	Calling `read()` in a loop on the same file will always overwrite the buffer with the new characters read, as it uses the same memory. 
+	⁃	What happens when we call `read()` again but there are less bytes than `n` to read before the end of a file?
+	⁃	It’ll read the remaining bytes, then stores the read characters in the buffer, then returns the number of bytes it’s read, and when it’s finished reading the file, it returns `0`. 
+	⁃	If we call `read()` again on the file, it’ll return us `0` because it will have succeeded in reading `0` bytes as it’s at the end of the file. 
+	⁃	If there are errors, it’ll return `1`. 
 	d.	 `close()`:
 	⁃	 Tells the operating system that you are done with a file descriptor and closes the file pointed to by the file descriptor. 
 	⁃	This function is defined in the `unistd.h` header file.
 	⁃	Prototype: `int close(int fd);`
 */
+
+CODING GET_NEXT_LINE:
+
+	1.	Recall, the size of the buffer will be defined at compilation, so it’ll vary, and will be dependent on the user telling `read()` how many bytes of the file they want read.
+	⁃	e.g. `cc -Wall -Wextra -Werror -D Buffer_size=42 <files>.c`.
+	2.	Recall, calling `read()` in a loop on a file will overwrite the same buffer each time it stores the new bytes of characters read. 
+	⁃	We need a remedy for this, e.g. we create a variable called “stash” so that the previously read bytes are not lost/overwritten. 
+	3.	Recall, we need `get_next_line()` to retrieve a line that ends with a newline `\n`.
+	⁃	So, we will need to check in our “stash” if a `\n` has been reached. 
+	⁃	If no `\n` has been reached, then we continue to call `read()`. 
+	⁃	Then it’ll read the next n bytes of characters, then increment the pointer n bytes forward, then store in the buffer the n bytes read, then if successful, return the number of bytes read. 
+	⁃	Then put the characters read into the “stash”. 
+	⁃	Then we look inside “stash” again to check if there is a `\n` in there. 
+	⁃	If no `\n` has been reached, then we continue our work again and call `read()`. 
+	⁃	If in our “stash” we did find a `\n` signaling a line break in our file, we then want to extract this line (a string of characters), from our reserve “stash”.
+	⁃	In order to send this extracted line to `get_next_line()` for it to return to us, we will need a variable e.g. called “line”. 
+	⁃	Our variable “line” will store the extracted characters we want, included the line break `\n` and the end. 
+	⁃	Now that `get_next_line()` has returned us our first line of the file, we will need to clean up our “stash”, as what it had previously stored, was already returned, and we no longer need “stash” to store it. 13m
