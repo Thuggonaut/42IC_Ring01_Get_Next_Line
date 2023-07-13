@@ -322,4 +322,10 @@ CODING GET_NEXT_LINE:
 	⁃	If in our “stash” we did find a `\n` signaling a line break in our file, we then want to extract this line (a string of characters), from our reserve “stash”.
 	⁃	In order to send this extracted line to `get_next_line()` for it to return to us, we will need a variable e.g. called “line”. 
 	⁃	Our variable “line” will store the extracted characters we want, included the line break `\n` and the end. 
-	⁃	Now that `get_next_line()` has returned us our first line of the file, we will need to clean up our “stash”, as what it had previously stored, was already returned, and we no longer need “stash” to store it. 13m
+	⁃	Now that `get_next_line()` has returned us our first line of the file, we will need to clean up our “stash”, as what it had previously stored, was already returned, and we no longer need “stash” to store it. 
+ already returned, and we no longer need “stash” to store it. 
+	⁃	We need to call `get_next_line()` on the file we want read multiple times until all the lines have been read, one line at a time. 
+	4.	Recall, when `read()` is called subsequently, the pointer to the buffer remains where it last completed its n bytes read, because it is associated with the file descriptor of that file.
+	⁃	So, after our first line that was read and returned, even though we’d already cleaned up our “stash”, when we come back and call `get_next_line()` again, the “stash” variable is re-initialized, back to where the pointer was last left off. 
+	⁃	Recall, a static variable is 14:44
+
