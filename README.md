@@ -96,8 +96,8 @@ The return value of `get_next_line()` then, is the line that was read from a fil
    - `static data_type variable_name = initial_value;`
 	
 5. Properties of static variables in C:
-   - Lifetime: 
-	- The lifetime of a static variable extends throughout the entire execution of the program.
+	- Lifetime: 
+		- The lifetime of a static variable extends throughout the entire execution of the program.
    - Scope: 
 	⁃	A static variable can have either global or local scope. 
 	⁃	If declared inside a function, it has local scope, and if declared outside of any function, it becomes a global variable. See # .f & .g
