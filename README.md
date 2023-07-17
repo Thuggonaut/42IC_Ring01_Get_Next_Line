@@ -307,7 +307,7 @@ The return value of `get_next_line()` then, is the line that was read from a fil
 	- Prototype: `int close(int fd);`
 
 
-### CODING GET_NEXT_LINE:
+### 3. CODING GET_NEXT_LINE:
 
 1. Recall, the size of the buffer will be defined at compilation, so it’ll vary, and will be dependent on the user telling `read()` how many bytes of the file they want read.
 	- e.g. `cc -Wall -Wextra -Werror -D Buffer_size=42 <files>.c`.
