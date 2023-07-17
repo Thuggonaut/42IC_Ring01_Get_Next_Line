@@ -98,19 +98,19 @@ The return value of `get_next_line()` then, is the line that was read from a fil
 5. Properties of static variables in C:
 	- Lifetime: 
 		- The lifetime of a static variable extends throughout the entire execution of the program.
-   - Scope: 
-	⁃	A static variable can have either global or local scope. 
-	⁃	If declared inside a function, it has local scope, and if declared outside of any function, it becomes a global variable. See # .f & .g
-	⁃	Memory Allocation: 
-	⁃	A static variable’s memory is allocated in the data segment of the program’s memory, rather than the stack. See # .h
-	⁃	Initialization: 
-	⁃	A static variable is initialized only once during program execution, at the time of program loading.
-	⁃	Thread Safety: 
-	⁃	Static variables are not thread-safe by default. 
-	⁃	All threads of a process share the same address space, and since a static variable has a fixed address, its state is shared by all the threads.
-	⁃	If multiple threads access the same static variable simultaneously, it can lead to race conditions and unexpected behavior. 
-	⁃	A race condition arises when the outcome of a program depends on the indeterministic ordering of operations in different threads.
-	d.	Example of a Static Variable in C:
+	- Scope: 
+		- A static variable can have either global or local scope. 
+		- If declared inside a function, it has local scope, and if declared outside of any function, it becomes a global variable. See # .f & .g
+	- Memory Allocation: 
+		- A static variable’s memory is allocated in the data segment of the program’s memory, rather than the stack. See # .h
+	- Initialization: 
+		- A static variable is initialized only once during program execution, at the time of program loading.
+	- Thread Safety: 
+		- Static variables are not thread-safe by default. 
+		- All threads of a process share the same address space, and since a static variable has a fixed address, its state is shared by all the threads.
+		- If multiple threads access the same static variable simultaneously, it can lead to race conditions and unexpected behavior. 
+		- A race condition arises when the outcome of a program depends on the indeterministic ordering of operations in different threads.
+	- Example of a Static Variable in C:
 ```
 #include <stdio.h>
 
@@ -130,14 +130,15 @@ int main()
 }
 ```
 
-	⁃	In this example, the `count` variable is declared as a `static integer` inside the `countFunctionCalls` function. 
-	⁃	Each time the function is called, `count` is incremented by one and its updated value is printed to the console. 
-	⁃	Because `count` is a static variable, it retains its value between function calls, allowing it to track the total number of times `countFunctionCalls` is called during the program's execution.
+- In this example, the `count` variable is declared as a `static integer` inside the `countFunctionCalls` function. 
+	- Each time the function is called, `count` is incremented by one and its updated value is printed to the console. 
+	- Because `count` is a static variable, it retains its value between function calls, allowing it to track the total number of times `countFunctionCalls` is called during the program's execution.
 
 	e.	Difference Between Static Global and Static Local Variables:
 	⁃	A static global variable is declared outside the main function and can be used anywhere inside the program, whereas a static local variable is declared inside a function or a block and can only be used within the scope in which it is declared.
 	⁃	A static global variable is not accessible outside the program. 
 	f.	Example of both a static global variable and a static local variable:
+
  
 ```
 #include <stdio.h>
