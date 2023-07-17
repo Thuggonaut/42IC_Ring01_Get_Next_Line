@@ -1,8 +1,8 @@
-Mandatory part:
+### Mandatory part:
 
 Create a function called get_next_line() that takes in a file descriptor to read from, and returns a line read from the file descriptor. 
 
-Note:
+#### Note:
 1. Repeated calls (e.g., using a loop) to your `get_next_line()` should let you read the text file pointed to by the file descriptor, one line at a time. 
 2. `get_next_line()` should return the line that was read, otherwise `NULL` if there is nothing else to read, or an error occured. 
     - The returned line should include the terminating `\n` character, except if the end of the file was reached and does not end with a `\n`.
@@ -22,17 +22,17 @@ Note:
     - however, you may choose to implement a logical way to handle this behaviour.
 10. Consider, whether your function will work if the `BUFFER_SIZE` value is `9999`, `1`, or `10000000`, and why it is so.
 
-Forbidden:
+#### Forbidden:
 - Your libft library
 - `lseek()`
 - Global variables
 
 
-Prototype:
+#### Prototype:
 `char  *get_next_line(int fd);`
 
 
-Bonus part:
+#### Bonus part:
 
 1. Develop `get_next_line()` using only one static variable.
 2. Your function can manage multiple file descriptors at the same time. For example:
@@ -45,7 +45,7 @@ Bonus part:
        - `get_next_line_bonus.h`
 
 
-Structure of directories/files:
+### Structure of directories/files:
 get_next_line/
   - get_next_line.c
   - get_next_line_utils.c
@@ -55,7 +55,7 @@ get_next_line/
   - get_next_line_bonus.h
 
 
-Learn:
+### Learn:
 1. Static Variables
 2. File descriptors and File I/O functions:
     - `open()`
@@ -86,11 +86,11 @@ The first time you call `get_next_line()`, it’ll retrieve the `first line` of 
 
 The return value of `get_next_line()` then, is the line that was read from a file, if successful. If not successful, I.e. there are no more lines to read, or there is an error during execution, it’ll return `NULL`. 
 
-/*
-1. STATIC VARIABLES:
 
-	a.	a. A static variable in C is a special type of variable that retains its value across multiple function calls and persists throughout the entire execution of the program. 
-	⁃	- This is in contrast to automatic variables, which lose their value once the function they are declared in completes execution.
+### 1. STATIC VARIABLES:
+
+a. A static variable in C is a special type of variable that retains its value across multiple function calls and persists throughout the entire execution of the program. 
+	- This is in contrast to automatic variables, which lose their value once the function they are declared in completes execution.
 	b.	Syntax:
 	⁃	`static data_type variable_name = initial_value;`
 	c.	Properties of static variables in C:
