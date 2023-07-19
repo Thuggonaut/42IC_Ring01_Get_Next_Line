@@ -1,6 +1,13 @@
+# get_next_line():
+
+This project helps us 
+
+
+
 ### Mandatory part:
 
 Create a function called get_next_line() that takes in a file descriptor to read from, and returns a line read from the file descriptor. 
+
 
 #### Note:
 1. Repeated calls (e.g., using a loop) to your `get_next_line()` should let you read the text file pointed to by the file descriptor, one line at a time. 
@@ -21,6 +28,7 @@ Create a function called get_next_line() that takes in a file descriptor to read
 9. `get_next_line()` will also be considered as having an undefined behaviour when reading a binary file.
     - however, you may choose to implement a logical way to handle this behaviour.
 10. Consider, whether your function will work if the `BUFFER_SIZE` value is `9999`, `1`, or `10000000`, and why it is so.
+
 
 #### Forbidden:
 - Your libft library
