@@ -19,7 +19,7 @@ char	*get_next_line(int fd) //Define a function that takes in integer (a file de
 	line[bytes_read] = '\0'; //Add a null-terminating character at the end of the `line` string
 	while (--bytes_read > -1) //Check if the value of `bytes_read` (after it has been decremented by 1 due to the -- operator) is greater than `-1`. See #3
 		line[bytes_read] = buffer[bytes_read]; //Copy the characters from the `buffer` to the `line` string in reverse order. See #4
-	return (line);
+	return (line); //Return the line read from the file
 }
 
 /*
