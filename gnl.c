@@ -11,16 +11,14 @@ char	*get_next_line(int fd) //Define a function that takes in integer (a file de
 		return (NULL); //If any is true, return `NULL`
 	while (read(fd, &buffer[bytes_read], 1) > 0 && buffer[bytes_read++] != '\n') //Read from the file one character at a time and check if the character read is a newline character ('\n'). See #2
 		;
-	if (bytes_read == 0)
-		return (NULL);
-	line = (char *)malloc(sizeof(char) * (bytes_read + 1));
-	if (!line)
-		return (NULL);
-	line[bytes_read] = '\0';
-	while (--bytes_read > -1)
-	{
-		line[bytes_read] = buffer[bytes_read];
-	}
+	if (bytes_read == 0) //Check if no bytes were read (i.e., the file is empty or only contains a newline)
+		return (NULL); //If so, return `NULL`
+	line = (char *)malloc(sizeof(char) * (bytes_read + 1)); //Allocate memory for the `line` string. The size of the memory allocated is one more than the number of bytes read to accommodate the `\0` character
+	if (!line) //Checks if the memory allocation failed
+		return (NULL); //If so, return `NULL`
+	line[bytes_read] = '\0'; //Add a null-terminating character at the end of the `line` string
+	while (--bytes_read > -1) //Check if the value of `bytes_read` (after it has been decremented by 1 due to the -- operator) is greater than `-1`. See #3
+		line[bytes_read] = buffer[bytes_read]; //Copy the characters from the `buffer` to the `line` string in reverse order. See #4
 	return (line);
 }
 
@@ -71,4 +69,24 @@ char	*get_next_line(int fd) //Define a function that takes in integer (a file de
 		- This is known as a "do nothing" or "null" statement. 
 		- It means that the loop continues to iterate, reading one character at a time from the file, but doesn't perform any other action within the loop. 
 		- The work is done in the condition itself: reading from the file and checking for the newline character.
+
+
+#3	The condition `--bytes_read > -1`:
+	- decrements `bytes_read` before comparing it with `-1` because in the previous steps, `bytes_read` was incremented each time a character was read from 
+	  the file, including when the newline character was read. 
+	- As a result, `bytes_read` is currently one position ahead of the last character read (not including the newline), so it needs to be decremented to 
+	  point back at the last character. 
+	- The comparison with `-1` is because array indices start at `0`, so the loop needs to continue as long as `bytes_read` is at least `0`.
+
+
+#4	`line[bytes_read] = buffer[bytes_read];`: 
+	- For each iteration of the loop, it takes the character at position `bytes_read` in `buffer` and assigns it to the same position in `line`. 
+	
+	1. In other words, it copies the character from `buffer` to `line`.
+
+	2. `while (--bytes_read > -1) { line[bytes_read] = buffer[bytes_read]; }`: 
+		- Together, these parts form a loop that starts from the end of `buffer` (and `line`) and works backwards to the beginning, copying each character
+		  from `buffer` to `line`.
+		- The end result of this loop is that `line` contains a copy of the characters from `buffer`, in the same order. 
+		- This is the `line` read from the file, which the function then returns.
 */
