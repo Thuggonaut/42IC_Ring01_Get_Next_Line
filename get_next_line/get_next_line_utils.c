@@ -50,31 +50,38 @@ char *ft_substr(char const *s, unsigned int start, size_t len) //Define a functi
     i = 0; //Initialised to `0` because no copying has been done
     if (!s || !(substr = malloc((len + 1) * sizeof(char)))) //Checks for an invalid input string `s`, and whether memory allocation has failed
         return (NULL); //If either are true, return `NULL`
-    while (i < len && *(s + start + i)) //Loop as long as there are more characters to copy (i < len), and 
+    while (i < len && *(s + start + i)) //Loop as long as there are more characters to copy (i < len), and the `i-th` character of `s` from the `start` position is not `\n`
     {
-        *(substr + i) = *(s + start + i);
-        i++;
+        *(substr + i) = *(s + start + i); //Copy the `i-th` character from the `start` position in `s` to the `i-th` position in `substr`. See #2
+        i++; //Move to the next character in `s`, and the next index in `substr` for processing
     }
-    *(substr + i) = '\0';
-    return (substr);
+    *(substr + i) = '\0'; //Ensure the new string is properly null terminated
+    return (substr); //Return a pointer to the begining of the new string
 }
 
-char *ft_strdup(const char *s)
+char	*ft_get_line(char **stash) //Define a function that takes a pointer to a string array (a pointer to a pointer to a character), and returns an extracted `line` 
 {
-    char *s_dup;
-    int i;
+	char		*line; //Declare a pointer variable that will store a pointer to the extracted `line` from `stash`
+	char		*tmp_buff; //Declare a temporary pointer variable that will store the old `stash`, while the new `stash` needs updating
+	int			len; //Declare an integer variable to keep track of the length of `line`
 
-    s_dup = (char *)malloc((ft_strlen(s) + 1) * sizeof(char));
-    if (!s_dup)
-        return (NULL);
-    i = 0;
-    while (s[i])
-    {
-        s_dup[i] = s[i];
-        i++;
-    }
-    s_dup[i] = '\0';
-    return (s_dup);
+	len = 0; //Iniatialised to `0` because no extraction has taken place yet
+	while ((*stash)[len] != '\n' && (*stash)[len] != '\0') //Increment `len` until a `\n` is found, and the end of `stash` has been reached, to traverse through `stash`
+		len++; //By the end of the loop, `len` will hold the length of the line in `stash` up to the `\n` or the end of the string
+	if ((*stash)[len] == '\n') //Check if a `\n` has been encountered at the end of `stash`, if so, perform the below operations
+	{
+		line = ft_substr(*stash, 0, len); //Assign to `line`, a new string created by `ft_substr()` that contains the characters from the start of `stash` (0-th index) up to, but not including, the `\n`
+		tmp_buff = *stash; //Assign to `tmp_buff` the characters from `stash` before `stash` is updated next
+		*stash = ft_substr(*stash, len + 1, ft_strlen(*stash) - (len + 1)); //`stash` is updated to be a new string that starts from the character after the `\n` in the old stash, until the end of the old stash
+		free(tmp_buff); 
+		tmp_buff = NULL;
+	}
+	else if ((*stash)[len] == '\0') //Check if a `\0` has been encountered at the end of `stash`, if so, perform the below operations
+	{
+		line = *stash;
+		*stash = NULL;
+	}
+	return (line);
 }
 
 char	*ft_line_read(int fd, char *line, char **stash)
@@ -95,31 +102,6 @@ char	*ft_line_read(int fd, char *line, char **stash)
 	return (ft_get_line(stash));
 }
 
-char	*ft_get_line(char **stash)
-{
-	char		*line;
-	char		*tmp_buff;
-	int			len;
-
-	len = 0;
-	while ((*stash)[len] != '\n' && (*stash)[len] != '\0')
-		len++;
-	if ((*stash)[len] == '\n')
-	{
-		line = ft_substr(*stash, 0, len);
-		tmp_buff = *stash;
-		*stash = ft_strdup(&((*stash)[len + 1]));
-		free(tmp_buff);
-		tmp_buff = NULL;
-	}
-	else if ((*stash)[len] == '\0')
-	{
-		line = *stash;
-		*stash = NULL;
-	}
-	return (line);
-}
-
 /*
 #1  Using a pointer `p` to traverse, rather than directly using `str` to traverse:
     - `str` points to the memory location obtained by the `malloc` call. This memory location is the base address of our new concatenated string. This 
@@ -131,4 +113,26 @@ char	*ft_get_line(char **stash)
         - We wouldn't be able to return the beginning of the newly created string: 
           The requirement of `ft_strjoin` is to return a new string which is the concatenation of `s1` and `s2`. If we move `str` while putting in 
           characters, at the end of the function `str` would point to the end of the new string, not the beginning. 
+
+
+#2  C allows various operations to be performed on pointers which includes addition, subtraction, comparison etc., but it doesn't allow operations like 
+    multiplication or division. Addition and subtraction operations on pointers are special in the way they work. This is a very common practice in C where 
+    there is a need to navigate arrays or manipulate strings, because strings in C are essentially arrays of characters.
+
+    Let's break down *(substr + i) = *(s + start + i);:
+
+    1. `substr + i and s + start + i`: 
+        - In both of these expressions, `substr` and `s` are pointers which are being added to the integers `i` and `start + i` respectively. 
+        - This is called pointer arithmetic.
+        - When an integer is added to a pointer, it doesn't simply add the integer value to the memory address contained in the pointer. 
+                - Instead, it adds the integer multiplied by the size of the data type the pointer points to. 
+                - If `substr` is a pointer to a char, and the size of char is `1 byte`, then `substr + i` adds `i` bytes to the memory address contained 
+                  in `substr`. 
+                - This effectively moves the pointer `i` positions forward in an array of char.
+
+    2. `*(substr + i) and *(s + start + i)`: 
+        - The '*' operator is used here for dereferencing the pointer. 
+        - It returns the value stored in the memory location pointed to by the pointer.
+        - So `*(substr + i)` gives the `i-th` character from the begining of `substr`, and 
+        - `*(s + start + i)` gives the `i-th` character from the `start` position in `s`.
 */
