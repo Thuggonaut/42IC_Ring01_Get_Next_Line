@@ -74,7 +74,7 @@ char	*ft_get_line(char **stash) //Define a function that takes a pointer to a st
 		tmp_buff = *stash; //Assign to `tmp_buff` the characters from `stash` before `stash` is updated next
 		*stash = ft_substr(*stash, len + 1, ft_strlen(*stash) - (len + 1)); //`stash` is updated to be a new string that starts from the character after the `\n` in the old stash, until the end of the old stash
 		free(tmp_buff); //Free the old `stash` now stored in `tmp_buff`. See #3
-		tmp_buff = NULL;
+		tmp_buff = NULL; //Set to `NULL` to avoid dangling pointers. See #3
 	}
 	else if ((*stash)[len] == '\0') //Check if a `\0` has been encountered at the end of `stash`, if so, perform the below operations
 	{
@@ -84,22 +84,23 @@ char	*ft_get_line(char **stash) //Define a function that takes a pointer to a st
 	return (line); //Return the line that was extracted from `stash`
 }
 
-char	*ft_line_read(int fd, char *line, char **stash)
+//Read data from a file descriptor and store it in a buffer (`line`) until a `\n` is encountered. When a `\n` is found or the end of the file is reached, `line` buffer is freed and the `ft_get_line()` is called to extract a line from the `stash` string
+char	*ft_line_read(int fd, char *line, char **stash) //Define a function that takes a file descriptor, a pointer to a string, a pointer to a string array, and returns the extracted line from `stash`
 {
-	int			read_bytes;
-	char		*tmp_buff;
+	int			read_bytes; //Declare an integer variable that will store the number of bytes read from the file descriptor
+	char		*tmp_buff; //Declare a pointer variable that will store the old `stash`, while the new `stash` needs updating
 
-	while (!(ft_strchr(line, '\n')) && (read_bytes = read(fd, line, BUFFER_SIZE)))
+	while (!(ft_strchr(line, '\n')) && (read_bytes = read(fd, line, BUFFER_SIZE))) //Loop until a `\n` is found in `line`, and assign to `read_bytes`, the number of bytes actually read. If bytes read is `-1`, an error has occurred or there is no more data to read from `fd`, and this condition will be `false`. See #5
 	{
-		line[read_bytes] = '\0';
-		tmp_buff = *stash;
-		*stash = ft_strjoin(tmp_buff, line);
-		free(tmp_buff);
-		tmp_buff = NULL;
+		line[read_bytes] = '\0'; //Ensure `line` is properly null terminated as `read()` does not add a `\0` at the end of the data it reads
+		tmp_buff = *stash; //Assign to `tmp_buff` the characters from `stash` before `stash` is updated next
+		*stash = ft_strjoin(tmp_buff, line); //`stash` is updated to be a new string created by `ft_strjoin()`, that is the concatenation of the old `stash` and `line`
+		free(tmp_buff); //Free the old `stash` now stored in `tmp_buff`. See #3
+		tmp_buff = NULL; //Set to `NULL` to avoid dangling pointers. See #3
 	}
-	free(line);
-	line = NULL;
-	return (ft_get_line(stash));
+	free(line); //`line` is a buffer, used to temporarily hold data read from a file descriptor. After this data has been appended to `stash`, it is no longer needed in `line`
+	line = NULL; //Set to `NULL` because there are no characters left in `line` to process. See #4
+	return (ft_get_line(stash)); //`ft_get_line()` is called on `stash` to extract the next line from `stash`
 }
 
 /*
@@ -166,4 +167,11 @@ char	*ft_line_read(int fd, char *line, char **stash)
         - Setting `stash` to `NULL` also serves as an indicator that all data has been processed and there's nothing left in `stash`. 
         - If a subsequent call to `ft_get_line()` is made, it can check if `stash` is `NULL` and, if so, know immediately that there's
           no more data to process.
+
+
+#5  `read_bytes = read(fd, line, BUFFER_SIZE)`: 
+    - This is a call to the `read` function, which reads up to `BUFFER_SIZE` bytes of data from the file descriptor `fd` into the buffer 
+      pointed to by `line`. 
+    - The `read` function returns the number of bytes actually read, or `-1` if an error occurred or there's no data to read. 
+    - The result is stored in the `read_bytes` variable.
 */
