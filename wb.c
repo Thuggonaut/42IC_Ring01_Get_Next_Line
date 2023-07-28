@@ -1,22 +1,16 @@
 #include <stdio.h>
 
-char *ft_strchr(const char* str, int c) 
+size_t ft_strlen(const char *s)
 {
-    while (*str != c)
-        str++;
-    if (*str == c) 
-        return (char*)str;
-    else 
-        return (NULL);
+    const char *start = s;
+    while (*++s)
+        ;
+    return (s - start);
 }
 
-int main() 
+
+int main(void)
 {
-    char str[] = "Hello, world!";
-    char* ptr = ft_strchr(str, 'o');
-    if (ptr != NULL)
-        printf("Found '%c' at position %ld.\n", *ptr, ptr - str);
-    else 
-        printf("Character not found.\n");
-    return 0;
+    printf("%d\n", ft_strlen("12345"));
+    return (0);
 }

@@ -61,7 +61,7 @@ char *ft_substr(char const *s, unsigned int start, size_t len) //Define a functi
 
 char	*ft_get_line(char **stash) //Define a function that takes a pointer to a string array (a pointer to a pointer to a character), and returns an extracted `line` 
 {
-	char		*line; //Declare a pointer variable that will store a pointer to the extracted `line` from `stash`
+	char		*line; //Declare a pointer variable that will store a pointer to the extracted `line` from the `stash` string
 	char		*tmp_buff; //Declare a temporary pointer variable that will store the old `stash`, while the new `stash` needs updating
 	int			len; //Declare an integer variable to keep track of the length of `line`
 
@@ -73,15 +73,15 @@ char	*ft_get_line(char **stash) //Define a function that takes a pointer to a st
 		line = ft_substr(*stash, 0, len); //Assign to `line`, a new string created by `ft_substr()` that contains the characters from the start of `stash` (0-th index) up to, but not including, the `\n`
 		tmp_buff = *stash; //Assign to `tmp_buff` the characters from `stash` before `stash` is updated next
 		*stash = ft_substr(*stash, len + 1, ft_strlen(*stash) - (len + 1)); //`stash` is updated to be a new string that starts from the character after the `\n` in the old stash, until the end of the old stash
-		free(tmp_buff); 
+		free(tmp_buff); //Free the old `stash` now stored in `tmp_buff`. See #3
 		tmp_buff = NULL;
 	}
 	else if ((*stash)[len] == '\0') //Check if a `\0` has been encountered at the end of `stash`, if so, perform the below operations
 	{
-		line = *stash;
-		*stash = NULL;
+		line = *stash; //Assign to `line` the pointer to the new `stash` which contains all the remaining characters in `stash`
+		*stash = NULL; //Set to `NULL` because there are no characters left in `stash` to process. See #4
 	}
-	return (line);
+	return (line); //Return the line that was extracted from `stash`
 }
 
 char	*ft_line_read(int fd, char *line, char **stash)
@@ -135,4 +135,35 @@ char	*ft_line_read(int fd, char *line, char **stash)
         - It returns the value stored in the memory location pointed to by the pointer.
         - So `*(substr + i)` gives the `i-th` character from the begining of `substr`, and 
         - `*(s + start + i)` gives the `i-th` character from the `start` position in `s`.
+
+
+#3  The `tmp_buff` is used to hold the original `stash` string while a new `stash` string is being created.
+        - A new block of memory is allocated for the new `stash` string by `ft_substr()`, and the stash pointer is updated to point to
+          this new block of memory. 
+        - However, the original `stash` string is still occupying a block of memory, and this block of memory is no longer accessible 
+          because no pointers are pointing to it. This is what's known as a memory leak.
+        - To prevent this memory leak, the `tmp_buff` pointer is used to keep a reference to the original `stash` string before the 
+          `stash` pointer is updated. 
+        - Then, once the new `stash` string has been created, the original `stash` string can be safely freed using the `tmp_buff` 
+          pointer.
+        - By freeing the `tmp_buff`, you're freeing the memory that was originally allocated for the `stash` string, preventing a memory
+          leak. 
+        - Setting `tmp_buff` to `NULL` afterwards is a good practice to avoid dangling pointers.
+                - A dangling pointer is a pointer that doesn't point to a valid object. 
+                - If you have a pointer pointing to a memory location and that memory location is deallocated (for example, by using 
+                  `free()` in C), the pointer is now dangling. 
+                - It's pointing to a memory location that has been freed and can be reused for other purposes.
+                - Setting pointers to `NULL` after freeing the memory they point to, avoids returning pointers to local variables.
+
+
+#4  Setting `*stash` to `NULL` serves two purposes:
+    
+    1. Avoid dangling pointers: `
+        - After `line` has taken the remaining characters of `stash`, the memory previously pointed to by `stash is now owned by `line`. 
+        - To avoid having `stash` become a dangling pointer (a pointer that points to memory it doesn't own), it's set to `NUL`L.
+
+    2. Indicate the end of data: 
+        - Setting `stash` to `NULL` also serves as an indicator that all data has been processed and there's nothing left in `stash`. 
+        - If a subsequent call to `ft_get_line()` is made, it can check if `stash` is `NULL` and, if so, know immediately that there's
+          no more data to process.
 */
