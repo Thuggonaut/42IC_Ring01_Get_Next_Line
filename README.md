@@ -13,7 +13,7 @@ This project helps us understand more about:
 	The bonus part of `get_next_line` involves managing multiple file descriptors. This teaches you how to write code that can handle multiple inputs or outputs, which is a common requirement in many programs.
 
 
-## The Mandatory part:
+## 🔹 The Mandatory part:
 
 Create a function called get_next_line() that takes in a file descriptor to read from, and returns a line read from the file descriptor. 
 
