@@ -13,12 +13,12 @@ This project helps us understand more about:
 	The bonus part of `get_next_line` involves managing multiple file descriptors. This teaches you how to write code that can handle multiple inputs or outputs, which is a common requirement in many programs.
 
 
-## 🔹 The Mandatory part:
+## 🔵 The Mandatory part:
 
-Create a function called get_next_line() that takes in a file descriptor to read from, and returns a line read from the file descriptor. 
+Create a function called `get_next_line()` that takes in a file descriptor to read from, and returns a line read from the file descriptor. 
 
 
-### Note:
+### 🔹 Note:
 1. Repeated calls (e.g., using a loop) to your `get_next_line()` should let you read the text file pointed to by the file descriptor, one line at a time. 
 2. `get_next_line()` should return the line that was read, otherwise `NULL` if there is nothing else to read, or an error occured. 
     - The returned line should include the terminating `\n` character, except if the end of the file was reached and does not end with a `\n`.
@@ -39,17 +39,17 @@ Create a function called get_next_line() that takes in a file descriptor to read
 10. Consider, whether your function will work if the `BUFFER_SIZE` value is `9999`, `1`, or `10000000`, and why it is so.
 
 
-### Forbidden:
+### 🔹 Forbidden:
 - Your libft library
 - `lseek()`
 - Global variables
 
 
-### Prototype:
+### 🔹 Prototype:
 `char  *get_next_line(int fd);`
 
 
-## The Bonus part:
+## 🔵 The Bonus part:
 
 1. Develop `get_next_line()` using only one static variable.
 2. Your function can manage multiple file descriptors at the same time. For example:
@@ -62,7 +62,7 @@ Create a function called get_next_line() that takes in a file descriptor to read
        - `get_next_line_bonus.h`
 
 
-## STRUCTURE OF DIRECTORIES AND FILES:
+## 🔵 STRUCTURE OF DIRECTORIES AND FILES:
 get_next_line/
   - get_next_line.c
   - get_next_line_utils.c
@@ -72,7 +72,7 @@ get_next_line/
   - get_next_line_bonus.h
 
 
-## LEARN:
+## 🔵 LEARN:
 1. Static Variables
 2. File descriptors and File I/O functions:
     - `open()`
