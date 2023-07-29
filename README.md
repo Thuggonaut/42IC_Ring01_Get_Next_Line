@@ -63,7 +63,7 @@ Create a function called `get_next_line()` that takes in a file descriptor to re
 
 
 ## 🔵 Structure of directories and files:
-
+```
 get_next_line/
 │
 ├── get_next_line.c
@@ -72,7 +72,7 @@ get_next_line/
 ├── get_next_line_bonus.c
 ├── get_next_line_utils_bonus.c
 └── get_next_line_bonus.h
-
+```
 
 ## 🔵 Learn:
 1. Static Variables
