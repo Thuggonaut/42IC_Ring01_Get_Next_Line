@@ -1,4 +1,4 @@
-# get_next_line():
+# 📑 get_next_line():
 
 This project helps us understand more about:
 1. File I/O: 
