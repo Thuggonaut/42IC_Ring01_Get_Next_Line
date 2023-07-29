@@ -81,18 +81,12 @@ get_next_line/
     - `read()`
     - `close()`
     - These functions will help you read from the file descriptor provided.
-4. String manipulation functions:
-    - `strchr()`
-    - `strlen()`
-    - `strncpy()`
-    - `strdup()`
-    - These functions manipulate the strings read from the file descriptor and return the lines as required.
-5. Dynamic memory allocation:
+3. Dynamic memory allocation:
     - `malloc()`
     - `realloc()` 
     - `free()`
     - These functions will help you manage memory for the lines read from the file descriptor. 
-6. The `-D BUFFER_SIZE` flag
+4. The `-D BUFFER_SIZE` flag
 
 
 Nikito: https://www.youtube.com/watch?v=-Mt2FdJjVno&t=164s
