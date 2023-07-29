@@ -2,15 +2,12 @@
 
 size_t ft_strlen(const char *s) //Define a function that takes a pointer to a string, and returns its number of characters up to but not including the null character ('\0')
 {
-    size_t i; //Declare a `size_t` variable to be used as a counter. `size_t` is used because we need an unsigned integer type that can represent sizes, counts and indices
+    const char *start; //Declare a pointer variable that will store a pointer pointing to the start of `s` 
 
-    i = 0; //Initialised to `0` as no count has been processed
-    while (*s) //Loop until the end of the string is reached
-    {
-        i++; //Add `1` to our count
-        s++; //Move to the next character for counting
-    }    
-    return (i); //Return the number of characters in the string counted
+    start = s; //Assign to `start` the pointer pointing to `s`
+    while (*s++) //This while loop does not need to have any executions inside `{}` brackets. It will loop until the end of `s` is reached, and in each iteration it post-increments the pointer to the next character
+      ;
+    return (s - start - 1); //`s` is now pointing to the end of `s`. The resulting length of `s` is calulated by subtracting the final position of `start` of the string (index `0`) from the position of `s`. The `-1` is to account for the extra increment for the `\0`
 }
 
 char *ft_strchr(const char *s, int c) //Define a function that takes a pointer to a string, an integer that represents a char, and returns a pointer to the first occurrence of the character `c` in the string `s`
@@ -84,7 +81,6 @@ char	*ft_get_line(char **stash) //Define a function that takes a pointer to a st
 	return (line); //Return the line that was extracted from `stash`
 }
 
-//Read data from a file descriptor and store it in a buffer (`line`) until a `\n` is encountered. When a `\n` is found or the end of the file is reached, `line` buffer is freed and the `ft_get_line()` is called to extract a line from the `stash` string
 char	*ft_line_read(int fd, char *line, char **stash) //Define a function that takes a file descriptor, a pointer to a string, a pointer to a string array, and returns the extracted line from `stash`
 {
 	int			read_bytes; //Declare an integer variable that will store the number of bytes read from the file descriptor

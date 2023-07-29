@@ -99,6 +99,9 @@ The return value of `get_next_line()` then, is the line that was read from a fil
 
 1. A static variable in C is a special type of variable that retains its value across multiple function calls and persists throughout the entire execution of the program.
 	- This is in contrast to automatic variables, which lose their value once the function they are declared in completes execution.
+	- In the case of our `get_next_line.c`, a static variable (e.g. `string`) retains its value between function calls. 
+		- Without `static`, `string` would be reinitialised to its default value every time `get_next_line()` is called (for example, in a loop).
+		- With `static`, once `string` is initialised, it keeps its value until the program ends. This is important for the function to remember the `string` between calls. For example, it needs to remember the remainder of a line after a newline character is found.
 
 2. Syntax:
 	- `static data_type variable_name = initial_value;`

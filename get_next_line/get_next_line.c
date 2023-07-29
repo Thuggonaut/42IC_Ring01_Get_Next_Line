@@ -11,6 +11,33 @@ char *get_next_line(int fd) //Define a function that takes in integer (a file de
 }
 
 /*
+TO TEST:
+
+#include <fcntl.h>
+#include <stdio.h>
+
+int main(void)
+{
+    int fd = open("file1.txt", O_RDONLY);
+    char *line;
+
+    if (fd < 0 )
+    {
+        printf("Error opening files\n");
+        return (1);
+    }
+    printf("Reading from file1.txt:\n");
+    while ((line = get_next_line(fd)) != NULL)
+    {
+        printf("%s\n", line);
+        free(line);
+    }
+    close(fd);
+    return (0);
+}
+*/
+
+/*
 RE `BUFFER_SIZE`:
     - You can change the buffer size at compilation. When you compile the C source code, the -D option will set a preprocessor macro. 
     - Compile your code like this, e.g. with buffer size of 42:

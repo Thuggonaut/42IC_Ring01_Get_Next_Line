@@ -1,4 +1,6 @@
-#include "gnl.h"
+/*
+This code belongs to Christopher Murphy. I couldn't resist dissecting a clever get_next_line function that was written in less than 25 lines of code.
+*/
 
 char	*get_next_line(int fd) //Define a function that takes in integer (a file descriptor), and returns a pointer to a character
 {
