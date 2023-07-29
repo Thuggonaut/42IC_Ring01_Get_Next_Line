@@ -62,7 +62,7 @@ Create a function called `get_next_line()` that takes in a file descriptor to re
        - `get_next_line_bonus.h`
 
 
-## 🔵 STRUCTURE OF DIRECTORIES AND FILES:
+## 🔵 Structure of directories and files:
 get_next_line/
   - get_next_line.c
   - get_next_line_utils.c
@@ -72,7 +72,7 @@ get_next_line/
   - get_next_line_bonus.h
 
 
-## 🔵 LEARN:
+## 🔵 Learn:
 1. Static Variables
 2. File descriptors and File I/O functions:
     - `open()`
@@ -104,7 +104,7 @@ The first time you call `get_next_line()`, it’ll retrieve the `first line` of 
 The return value of `get_next_line()` then, is the line that was read from a file, if successful. If not successful, I.e. there are no more lines to read, or there is an error during execution, it’ll return `NULL`. 
 
 
-## 1. STATIC VARIABLES:
+## 1. Static variables:
 
 1. A static variable in C is a special type of variable that retains its value across multiple function calls and persists throughout the entire execution of the program.
 	- This is in contrast to automatic variables, which lose their value once the function they are declared in completes execution.
@@ -281,7 +281,7 @@ The return value of `get_next_line()` then, is the line that was read from a fil
 8. In summary, static variables in C are an important feature that allow for the creation of variables that persist throughout the program’s execution, reducing the need for recomputing values and optimizing performance. However, it's important to be aware of potential issues that can arise when using static variables in a multi-threaded environment or when accessing them outside of their defined scope.
 
 
-## 2. FILE DESCRIPTORS & FILE I/O FUNCTIONS:
+## 2. File descriptors & File I/O functions:
 
 1. File Descriptors are a key concept in Unix and Unix-like operating systems. 
 	- They are used to manage input and output operations in C programming. 
@@ -327,7 +327,7 @@ The return value of `get_next_line()` then, is the line that was read from a fil
 	- Prototype: `int close(int fd);`
 
 
-## 3. CODING GET_NEXT_LINE:
+## 3. Coding get_next_line:
 
 1. Recall, the size of the buffer will be defined at compilation, so it’ll vary, and will be dependent on the user telling `read()` how many bytes of the file they want read.
 	- e.g. `cc -Wall -Wextra -Werror -D Buffer_size=42 <files>.c`.
