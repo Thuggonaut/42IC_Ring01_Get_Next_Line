@@ -1,10 +1,19 @@
 # get_next_line():
 
-This project helps us 
+This project helps us understand more about:
+	1. File I/O: 
+		`get_next_line` involves reading from a file descriptor, which is a fundamental operation in many programs. It teaches you how to use functions like `read` to interact with file descriptors.
+	2. Static Variables: 
+		`get_next_line`` uses static variables to keep track of the stash string between function calls. This teaches you about the lifetime and scope of static variables.
+	3. Error Handling: 
+		`get_next_line` needs to handle several potential error conditions, such as an invalid file descriptor or a failed memory allocation. This teaches you about error handling and how to write robust code that can handle unexpected situations.
+	4. Buffering: 
+		The concept of a "storage" string in get_next_line is a form of buffering. It teaches you how buffering can improve the efficiency of I/O operations by reducing the number of system calls.
+	5. Multi-file Descriptor Management: 
+		The bonus part of `get_next_line` involves managing multiple file descriptors. This teaches you how to write code that can handle multiple inputs or outputs, which is a common requirement in many programs.
 
 
-
-### Mandatory part:
+### The Mandatory part:
 
 Create a function called get_next_line() that takes in a file descriptor to read from, and returns a line read from the file descriptor. 
 
