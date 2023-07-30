@@ -22,7 +22,7 @@ This project helps us understand more about:
 	- Step 3: [Learn File descriptors and File I/O functions](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-learn-file-descriptors-and-file-io-functions)
 	- Step 4: [Learn Dynamic memory allocation functions](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-4-learn-dynamic-memory-allocation-functions)
 	- Step 5: [Learn the `-D BUFFER_SIZE` flag](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-5-learn-the--d-buffer_size-flag)
-	- Step 6: Understand get_next_line
+	- Step 6: [Understand get_next_line](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-6-understand-get_next_line)
 	- Step 7: Code get_next_line
 
 
@@ -314,37 +314,44 @@ get_next_line/
 
 ## 🔵 Step 6: Understand get_next_line
 
-1. Recall, file descriptors “fd” is a reference to a file that is opened on your computer. 
+1. 🔹 Recall, file descriptors “fd” is a reference to a file that is opened on your computer. 
 	- We tell `get_next_line()` to go look in this file, and return us a string of characters, which will be the line that was read from the file.
 
-2. The first time we call `get_next_line()`, it’ll retrieve the first line of the file.
+2. 🔹 The first time we call `get_next_line()`, it’ll retrieve the first line of the file.
 	- Thereafter, we should be able to read the entire file by calling `get_next_line()` in a loop on the file. 
 		- In a loop, after returning the first line of a file `line 1`, whenever `get_next_line()` is called again on the file, it will send the function the next line `line 2`, then `line 3`, and so on, until there are no more lines to read from in the file. 
 
-3. The return value of `get_next_line()`, is the line that was read from a file, if successful. 
+3. 🔹 The return value of `get_next_line()`, is the line that was read from a file, if successful. 
 	- If not successful, i.e. there are no more lines to read, or there is an error during execution, it’ll return `NULL`. 
 
+4. 🔹 Recall, the size of the buffer will be defined at compilation, so it’ll vary, and it will be dependent on the user telling `read()` how many bytes of the file they want to read.
+	- `cc -Wall -Wextra -Werror -D Buffer_size=42 <files>.c`
 
-1. Recall, the size of the buffer will be defined at compilation, so it’ll vary, and will be dependent on the user telling `read()` how many bytes of the file they want read.
-	- e.g. `cc -Wall -Wextra -Werror -D Buffer_size=42 <files>.c`.
-
-2. Recall, calling `read()` in a loop on a file will overwrite the same buffer each time it stores the new bytes of characters read. 
-	- We need a remedy for this, e.g. we create a variable called “stash” so that the previously read bytes are not lost/overwritten. 
+5. 🔹 Recall, calling `read()` in a loop on a file will overwrite the same buffer each time it stores the new bytes of characters read. 
+	- We need a solution for this, e.g. we create a `static variable` called `stash` so that the previously read bytes are not lost/overwritten. 
 	
-3. Recall, we need `get_next_line()` to retrieve a line that ends with a newline `\n`.
-	- So, we will need to check in our “stash” if a `\n` has been reached. 
-	- If no `\n` has been reached, then we continue to call `read()`. 
-	- Then it’ll read the next n bytes of characters, then increment the pointer n bytes forward, then store in the buffer the n bytes read, then if successful, return the number of bytes read. 
-	- Then put the characters read into the “stash”. 
-	- Then we look inside “stash” again to check if there is a `\n` in there. 
-	- If no `\n` has been reached, then we continue our work again and call `read()`. 
-	- If in our “stash” we did find a `\n` signaling a line break in our file, we then want to extract this line (a string of characters), from our reserve “stash”.
+6. 🔹 We need `get_next_line()` to retrieve a line that ends with a `\n`.
+	- This means, we will need to check in our `stash` (what's been read) if a `\n` has been encountered. 
+		- If no `\n` has been found, we will continue to call `read()`. 
+			- Then it’ll read the next `n` bytes of characters
+			- Then increment the pointer `n` bytes forward
+			- Then store in the buffer the `n` bytes read
+			- Then if successful, return the number of bytes read. 
+	- Then store the characters read into `stash`. 
+	- We look inside `stash` again to check if there is a `\n` in there. 
+		- If no `\n` has been reached, then we continue our work again and call `read()`. 
+		- If in our `stash` we did find a `\n`
+			- This means we have a line break in our file.
+			- We then want to extract this line (a string of characters), from our reserve `stash`.
 	- In order to send this extracted line to `get_next_line()` for it to return to us, we will need a variable e.g. called “line”. 
-	- Our variable “line” will store the extracted characters we want, included the line break `\n` and the end. 
-	- Now that `get_next_line()` has returned us our first line of the file, we will need to clean up our “stash”, as what it had previously stored, was already returned, and we no longer need “stash” to store it. 
-	- We need to call `get_next_line()` on the file we want read multiple times until all the lines have been read, one line at a time. 
+		- Our variable `line` will store the extracted characters we want, including the line break `\n`, or the `\0` signalling the end of the file. 
+	- Now that `get_next_line()` has returned us our first line of the file, we will need to clean up our `stash`, as what it had previously stored was already returned, and we no longer need `stash` to store it. 
 
-4. Recall, when `read()` is called subsequently, the pointer to the buffer remains where it last completed its n bytes read, because it is associated with the file descriptor of that file.
-	- So, after our first line that was read and returned, even though we’d already cleaned up our “stash”, when we come back and call `get_next_line()` again, the “stash” variable is re-initialized, back to where the pointer was last left off. 
-	- Recall, a static variable is a variable that will keep its value between two function calls. 
-	- In this case, it will have stored everything that has been read. 
+7. 🔹 Recall, when `read()` is called subsequently, the pointer to the buffer remains where it last completed its `n` bytes read, because it is associated with the file descriptor of that file.
+	- This means, after our first line that was read and returned, even though we’d already cleaned up our `stash`, when we come back and call `get_next_line()` again, the `stash` variable is re-initialized, back to where the pointer was last left off. 
+		- This is because `stash` is a `static variable`. Recall, a static variable is a variable that will keep its value between function calls. 
+		- In this case, it will have stored everything that had been previously read. 
+
+
+## 🔵 Step 7: Code get_next_line
+
