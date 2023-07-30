@@ -89,7 +89,7 @@ get_next_line/
 
 ## 🔵 Step 2: Learn Static Variables:
 
-1. #### 🔹 A static variable in C
+1. 🔹 **A static variable in C**
 	- is a special in that it retains its value across multiple function calls and persists throughout the entire execution of the program.
 	- In the case of our `get_next_line.c`, a static variable (e.g. `string`) retains its value between function calls. 
 		- Without `static`, `string` would be reinitialised to its default value every time `get_next_line()` is called (for example, in a loop).
