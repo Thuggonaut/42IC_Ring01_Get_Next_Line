@@ -23,7 +23,7 @@ This project helps us understand more about:
 	- Step 4: [Learn Dynamic memory allocation functions](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-4-learn-dynamic-memory-allocation-functions)
 	- Step 5: [Learn the `-D BUFFER_SIZE` flag](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-5-learn-the--d-buffer_size-flag)
 	- Step 6: [Understand get_next_line](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-6-understand-get_next_line)
-	- Step 7: Code get_next_line
+	- Step 7: [Code get_next_line](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-7-code-get_next_line)
 
 
 ## 🔵 The Mandatory part:
@@ -328,7 +328,7 @@ get_next_line/
 	- `cc -Wall -Wextra -Werror -D Buffer_size=42 <files>.c`
 
 5. 🔹 Recall, calling `read()` in a loop on a file will overwrite the same buffer each time it stores the new bytes of characters read. 
-	- We need a solution for this, e.g. we create a `static variable` called `stash` so that the previously read bytes are not lost/overwritten. 
+	- We need a solution for this, e.g. we create a `static variable` called `stash` so that the previously read bytes are stored in here, and not lost/overwritten. 
 	
 6. 🔹 We need `get_next_line()` to retrieve a line that ends with a `\n`.
 	- This means, we will need to check in our `stash` (what's been read) if a `\n` has been encountered. 
@@ -354,4 +354,25 @@ get_next_line/
 
 
 ## 🔵 Step 7: Code get_next_line
+Now that we understand how `get_next_line()` should function, after a chunk of bytes have been read from the file descriptor and stored in `stash`, we will need to have the following considerations:
+
+1. 🔹 We need to locate the `\n` whenever it is encountered in our `stash` string (the characters that has been read).
+	- Recall, from our libft library, `ft_strchr()` searches for a character within a string.
+
+2. 🔹 When a `\n` is encountered in `stash`, we will need to extract from it, a line of characters from the begining of `stash`, and up to the `\n`.
+	- We can create a helper function to do this, call it `ft_get_line()`, and make it return said `line`. 
+	- We will need to account for, if the end of `stash` is a `\0` signalling the end of a file. 
+	- `stash` then needs to be updated, to begin after the previously read `\n`, up to the end of `stash`. 
+		- The old `stash` now needs to be updated to a new `stash` because the line in the old, will have already been assigned into `line`, so we no longer need it in `stash`. 
+
+3. 🔹 To extract the `line` from `stash` that is up to the `\n`, we will need to allocate memory and create a new string, in order for `ft_get_line` to return it. 
+	- Recall, from our libft library, `ft_substr()` allocates memory, and copies into a new string, the characters from a starting index of the input string, to an ending index. 
+
+4. 🔹 Referring back to `2.`, for `stash` to be updated to contain the "leftover" characters from the previously read `\n`, up to the end of `stash`, new memory needs to be allocated for this also. 
+	- This means, `malloc()` needs to know exactly how many bytes is needed for memory allocation. 
+	- So, we need to calculate the length of strings. 
+	- Recall, from our libft library, `ft_strlen()` calculates the length of a string, not including the `\0`.
+	- We can use `ft_substr()` to allocate memory, `ft_strlen()` to calculate the length of `stash`, and pointer arithmetic to copy the characters needed. 
+
+5. 🔹 Currently, we have the extracted `line`, and we have an updated `stash`. 
 

@@ -63,7 +63,7 @@ char	*ft_get_line(char **stash) //Define a function that takes a pointer to a st
 	int			len; //Declare an integer variable to keep track of the length of `line`
 
 	len = 0; //Iniatialised to `0` because no extraction has taken place yet
-	while ((*stash)[len] != '\n' && (*stash)[len] != '\0') //Increment `len` until a `\n` is found, and the end of `stash` has been reached, to traverse through `stash`
+	while ((*stash)[len] != '\n' && (*stash)[len] != '\0') //Increment `len` until a `\n` is found, or the end of `stash` has been reached, to traverse through `stash`
 		len++; //By the end of the loop, `len` will hold the length of the line in `stash` up to the `\n` or the end of the string
 	if ((*stash)[len] == '\n') //Check if a `\n` has been encountered at the end of `stash`, if so, perform the below operations
 	{
