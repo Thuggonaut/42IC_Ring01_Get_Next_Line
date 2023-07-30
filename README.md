@@ -116,23 +116,23 @@ get_next_line/
 				- <sub> A race condition arises when the outcome of a program depends on the indeterministic ordering of operations in different threads.</sub>
 			- <sub> In the context of `get_next_line`, it reads from a file descriptor and stores interim results in a static variable, which retains its value across multiple calls to the function. However, if you have multiple threads in your program and they're all calling get_next_line concurrently, they could all attempt to access and modify this static variable simultaneously, which could lead to inconsistent results or errors. This concept is referred to as thread safety.</sub>
 
-4. 🔹 Example of a Static Variable in C:
+4. 🔹 **Example of a Static Variable in C:**
 	```
 	#include <stdio.h>
 
 	void countFunctionCalls() 
 	{
-    		static int count = 0;
-    		count++;
-    		printf("This function has been called %d times\n", count);
+    	static int count = 0;
+    	count++;
+    	printf("This function has been called %d times\n", count);
 	}
 
 	int main() 
 	{
-    		countFunctionCalls();
-    		countFunctionCalls();
-    		countFunctionCalls();
-    		return (0);
+    	countFunctionCalls();
+    	countFunctionCalls();
+    	countFunctionCalls();
+    	return (0);
 	}
 	```
 
@@ -140,8 +140,9 @@ get_next_line/
 		- Each time the function is called, `count` is incremented by one and its updated value is printed to the console. 
 		- Because `count` is a static variable, it retains its value between function calls, allowing it to track the total number of times `countFunctionCalls` is called during the program's execution.
 
-5. 🔹 Difference Between Static Global and Static Local Variables:
-	- A static global variable is declared outside the main function and can be used anywhere inside the program, whereas a static local variable is declared inside a function or a block and can only be used within the scope in which it is declared.
+5. 🔹 **Difference Between Static Global and Static Local Variables:**
+	- A static global variable is declared outside the main function and can be used anywhere inside the program, whereas
+	- A static local variable is declared inside a function or a block and can only be used within the scope in which it is declared.
 	- A static global variable is not accessible outside the program. 
 	- Example of both a static global variable and a static local variable:
 	```
@@ -151,24 +152,24 @@ get_next_line/
 
 	void func() 
 	{
-    		static int local_static_var = 20;  // local static variable
-    		printf("%d\n", local_static_var);
-    		printf("%d\n", global_static_var);
+    	static int local_static_var = 20;  // local static variable
+    	printf("%d\n", local_static_var);
+    	printf("%d\n", global_static_var);
 	}
 
 	int main() 
 	{
-    		func();
-    		printf("%d\n", global_static_var);
-    		// printf("%d\n", local_static_var);  // This would cause a compile error
-    		return 0;
+    	func();
+    	printf("%d\n", global_static_var);
+    	printf("%d\n", local_static_var);  // This would cause a compile error
+    	return (0);
 	}
 	```
  
-   	- In the above example, `global_static_var` can be accessed by any function in the file, while `local_static_var` can only be accessed within the func function.
+	- In the above example, `global_static_var` can be accessed by any function in the file, while `local_static_var` can only be accessed within the func function.
 	- Both local and global static variables have static storage duration, meaning they exist for the entire lifetime of the program. They are created and initialized only once and keep their value between function calls or blocks.
 
- 6. 🔹 Visibility:
+ 6. 🔹 **Visibility:**
 	- The visibility of a variable refers to the parts of the code from which a variable can be accessed or referred to.
 	- A local static variable is only visible within the function or block where it is declared.
 	- A global static variable is visible to all functions in the file where it is declared, but it is not visible to other files. 
@@ -183,7 +184,7 @@ get_next_line/
 
 	void func1() 
 	{
-    		printf("%d\n", global_static_var);
+    	printf("%d\n", global_static_var);
 	}
 
 	// file2.c
@@ -193,81 +194,26 @@ get_next_line/
 
 	void func2() 
 	{
-    		printf("%d\n", global_static_var);
+    	printf("%d\n", global_static_var);
 	}
 
 	int main() 
 	{
-    		func1();
-    		func2();
-    		return 0;
+    	func1();
+    	func2();
+    	return (0);
 	}
 	```
 
-	- In the above example, the `global_static_var` is a `global static` variable declared in file1.c. 
+	- In the above example, the `global_static_var` is a `global static` variable declared in `file1.c`. 
 	- It can be accessed by the `func1` function in the same file, but cannot be accessed by the `func2` function in `file2.c`.
 
-7. 🔹 A static variable’s memory is allocated in the data segment of the program’s memory, rather than the stack.
-	- Memory allocation for static variables is done at the time of program startup, and they live until the program ends. 
-	- They cannot be "freed" or "reallocation”.
-	- Static variables are stored in the `.BSS (Block Started by Symbol) segment` for non-initialized static variables and `.DATA segment` for initialized static variables. The actual storage location of the data will be implementation dependent.
-
-	- For instance, the following code examples illustrate how static variables are allocated in memory:
-	
- 	```
-	int main(int argc, char * argv[])
-	{
-    		return 0;
-	}
-
-	> gcc test.c
-	> size a.out
-	text     data     bss   dec    hex   filename
-	1056     252      8     1316   524   a.out
-	```
-
-	- When we declare a static variable `i` inside the main function:
-
-	```
-	int main(int argc, char * argv[])
-	{
-    		static int i;
-    		return 0;
-	}
-
-	> gcc test.c
-	> size a.out
-	text       data     bss   dec     hex   filename
-	1056     252      12    1316   524   a.out
-	```
-
-	- And when we initialize the static variable `i` with a value:
-
-	```
-	int main(int argc, char * argv[])
-	{
-    		static int i = 2;
-    		return 0;
-	}
-
-	> gcc test.c
-	> size a.out
-	text     data     bss   dec    hex   filename
-	1056     256      8     1316   524   a.out
-	```
-
-   	- From the above examples, we can see that the size of the `.bss` segment increased when we declared a non-initialized static variable and the size of the `.data segment` increased when we declared an initialized static variable.
-	- The static memory allocation is applied to global variables, file scope variables, and those variables that are declared as static. 
-	- In static memory allocation, memory is allocated at compile time and cannot be changed after allocation.
-	- One feature of static memory allocation is that the allocated variables are permanent; hence the memory in this type of allocation cannot be reused and is, therefore, less efficient. 
-	- This allocation uses the stack for implementing the allocation process.
-	- It's important to note that static variables are not stored on the heap. 
-	- They are stored in the BSS segment if they are uninitialized and in the data segment if they are initialized.
-
-8. 🔹 In summary, static variables in C are an important feature that allow for the creation of variables that persist throughout the program’s execution, reducing the need for recomputing values and optimizing performance. However, it's important to be aware of potential issues that can arise when using static variables in a multi-threaded environment or when accessing them outside of their defined scope.
+7. 🔹 **In summary**
+	- Static variables in C are an important feature that allow for the creation of variables that persist throughout the program’s execution, reducing the need for recomputing values and optimizing performance. 
+	- However, it's important to be aware of potential issues that can arise when using static variables in a multi-threaded environment or when accessing them outside of their defined scope.
 
 
-
+## 🔵 Learn File descriptors and File I/O functions:
 
 
 
