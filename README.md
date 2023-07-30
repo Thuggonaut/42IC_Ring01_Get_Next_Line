@@ -110,11 +110,11 @@ get_next_line/
 		- A static variable is initialized only once during program execution, at the time of program loading.
 	- Thread Safety: 
 		- Static variables are not thread-safe by default. 
-		- <sub> A thread in programming is a small set of instructions that are scheduled and executed independently by the Central Processing Unit (CPU) of a computer.</sub> 
-		- <sub> All threads of a process share the same address space, and since a static variable has a fixed address, its state is shared by all the threads.</sub>
-		- <sub> If multiple threads access the same static variable simultaneously, it can lead to race conditions and unexpected behavior.</sub>
-			- <sub> A race condition arises when the outcome of a program depends on the indeterministic ordering of operations in different threads.</sub>
-		- <sub> In the context of `get_next_line`, it reads from a file descriptor and stores interim results in a static variable, which retains its value across multiple calls to the function. However, if you have multiple threads in your program and they're all calling get_next_line concurrently, they could all attempt to access and modify this static variable simultaneously, which could lead to inconsistent results or errors. This concept is referred to as thread safety.</sub>
+			- <sub> A thread in programming is a small set of instructions that are scheduled and executed independently by the Central Processing Unit (CPU) of a computer.</sub> 
+			- <sub> All threads of a process share the same address space, and since a static variable has a fixed address, its state is shared by all the threads.</sub>
+			- <sub> If multiple threads access the same static variable simultaneously, it can lead to race conditions and unexpected behavior.</sub>
+				- <sub> A race condition arises when the outcome of a program depends on the indeterministic ordering of operations in different threads.</sub>
+			- <sub> In the context of `get_next_line`, it reads from a file descriptor and stores interim results in a static variable, which retains its value across multiple calls to the function. However, if you have multiple threads in your program and they're all calling get_next_line concurrently, they could all attempt to access and modify this static variable simultaneously, which could lead to inconsistent results or errors. This concept is referred to as thread safety.</sub>
 
 4. 🔹 Example of a Static Variable in C:
 	```
