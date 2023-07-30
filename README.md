@@ -15,15 +15,15 @@ This project helps us understand more about:
 
 ## 🔵 Preface:
 - This project is the most challenging in Ring01 imo, but as usual, I learn best by drafting a plan, tackling new concepts, and write too many notes (If you read them, you will probably need eye drops).
-- I give credit to Nikito, who's video helped me understand how the function works. [Watch his video here:](https://www.youtube.com/watch?v=-Mt2FdJjVno&t=164s)
+- I give credit to Nikito, who's video helped me understand how the function works. [Watch his video here](https://www.youtube.com/watch?v=-Mt2FdJjVno&t=164s)
 - We will be completing both the [Mandatory](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-the-mandatory-part) and [Bonus](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-the-bonus-part) parts. Here is the outline:
-- Step 1: [Write the structure of directories and files required](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-structure-of-directories-and-files)
-- Step 2: [Learn Static Variables](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-2-learn-static-variables)
-- Step 3: Learn File descriptors and File I/O functions
-- Step 4: Learn Dynamic memory allocation functions
-- Step 5: Learn the `-D BUFFER_SIZE` flag
-- Step 6: Understand get_next_line
-- Step 7: Code get_next_line
+	- Step 1: [Write the structure of directories and files required](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-structure-of-directories-and-files)
+	- Step 2: [Learn Static Variables](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-2-learn-static-variables)
+	- Step 3: Learn File descriptors and File I/O functions
+	- Step 4: Learn Dynamic memory allocation functions
+	- Step 5: Learn the `-D BUFFER_SIZE` flag
+	- Step 6: Understand get_next_line
+	- Step 7: Code get_next_line
 
 
 ## 🔵 The Mandatory part:
