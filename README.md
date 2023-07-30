@@ -13,6 +13,18 @@ This project helps us understand more about:
 	The bonus part of `get_next_line` involves managing multiple file descriptors. This teaches you how to write code that can handle multiple inputs or outputs, which is a common requirement in many programs.
 
 
+## 🔵 Preface:
+- This project is the most challenging in Ring01 imo, but as usual, I learn best by drafting a plan, tackling new concepts, and write too many notes (If you read them, you will probably need eye drops).
+- I give credit to Nikito, who's video helped me understand how the function works. Watch his video here: https://www.youtube.com/watch?v=-Mt2FdJjVno&t=164s 
+- We will be completing both the Mandatory and Bonus parts. Here is the outline:
+- Step 1: Write the structure of directories and files required
+- Step 2: Learn Static Variables
+- Step 3: Learn File descriptors and File I/O functions
+- Step 4: Learn Dynamic memory allocation functions
+- Step 5: Learn the `-D BUFFER_SIZE` flag
+- Step 6: Coding get_next_line
+
+
 ## 🔵 The Mandatory part:
 
 Create a function called `get_next_line()` that takes in a file descriptor to read from, and returns a line read from the file descriptor. 
