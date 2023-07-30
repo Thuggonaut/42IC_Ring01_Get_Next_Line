@@ -19,7 +19,7 @@ This project helps us understand more about:
 - We will be completing both the [Mandatory](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-the-mandatory-part) and [Bonus](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-the-bonus-part) parts. Here is the outline:
 	- Step 1: [Write the structure of directories and files required](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-structure-of-directories-and-files)
 	- Step 2: [Learn Static Variables](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-2-learn-static-variables)
-	- Step 3: Learn File descriptors and File I/O functions
+	- Step 3: [Learn File descriptors and File I/O functions](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-learn-file-descriptors-and-file-io-functions)
 	- Step 4: Learn Dynamic memory allocation functions
 	- Step 5: Learn the `-D BUFFER_SIZE` flag
 	- Step 6: Understand get_next_line
@@ -75,7 +75,7 @@ Create a function called `get_next_line()` that takes in a file descriptor to re
        - `get_next_line_bonus.h`
 
 
-## 🔵 Step 1: Structure of directories and files:
+## 🔵 Step 1: Structure of directories and files
 ```
 get_next_line/
 │
@@ -87,7 +87,7 @@ get_next_line/
 └── get_next_line_bonus.h
 ```
 
-## 🔵 Step 2: Learn Static Variables:
+## 🔵 Step 2: Learn Static Variables
 
 1. 🔹 **A static variable in C:**
 	- is a special in that it retains its value across multiple function calls and persists throughout the entire execution of the program.
@@ -213,8 +213,55 @@ get_next_line/
 	- However, it's important to be aware of potential issues that can arise when using static variables in a multi-threaded environment or when accessing them outside of their defined scope.
 
 
-## 🔵 Learn File descriptors and File I/O functions:
+## 🔵 Step 3: Learn File descriptors and File I/O functions
 
+1. File Descriptors are a key concept in Unix and Unix-like operating systems. 
+	- They are used to manage input and output operations in C programming. 
+	- A file descriptor is an integer that uniquely identifies an open file in an operating system.
+	- Standard input `STDIN`, standard output `STDOUT`, and standard error `STDERR` are the first three file descriptors that are used by default on an operating system that is similar to Unix. 
+	- When any process begins, the file descriptors table for that process opens automatically with its `fd`  `0`, `1`, and `2` entries. Each of these three `fd` references an item in the `file table` for a file called `/dev/tty`.
+	- C programming provides a number of in-built functions to support reading from and writing to files. 
+	- The open(), read(), write() and close() used to perform input/output system calls are located in the `unistd.h` library.
+
+2. `open()`:
+	- Is used to open a file for reading, writing, or both. 
+	- This function can also create a file if it doesn't already exist. 
+	- The flags that are passed as arguments are defined inside the `fcntl.h` header file.
+	- prototype: 
+		`int open(const char *pathname, int flags);`
+
+3. `read()`:
+	- Reads a specified number of bytes (indicated by `cnt`) from a file (indicated by the file descriptor `fd`) into a memory area (indicated by `buf`). 
+	- Prototype: 
+		`ssize_t read(int fd, void *buf, size_t cnt);`
+		- Here, `fd` is the file descriptor from which to read, `buf` is the buffer into which to read, and `cnt` is the number of bytes to read.
+	- `read()` returns a `ssize_t` which is an integer. 
+		- So, we send `read()` a file descriptor, which is an integer.
+		- We send it a pointer of type `void` which is a buffer.
+		- We send it a second `size_t` which is a number of bytes. 
+		- Then, `read()` will read from a file, then store what it read in a variable. 
+		- On objects capable of seeking, the `read()` starts at a position given by the pointer associated with `fd`.
+		- Upon return from `read()`, the pointer is incremented by the number of bytes actually read. 
+		- So, when you call it for the first time on a file, the pointer will be positioned right before the first character of that file. 
+		- Then, you tell it to “read n bytes”, and say, `n = 5`, it’ll read 5 bytes of characters, while advancing the pointer five bytes forward. 
+		- Then, you tell it to “store the 5 characters read in the buffer I’ve sent you”, and it’ll store them in the buffer. 
+		- Finally, it returns the number of bytes it successfully read. 
+		- Calling `read()` again on the same file that was just read, it’ll remember the position of the pointer which will be where it last read from, as it’s associated with the file descriptor. 
+			- So, the pointer stays where it last was, at the end of the first call, and up calling it again it’ll know what it’s already read. 
+			- We tell it to read 5 bytes again, and it’ll read 5 bytes then increment the pointer 5 bytes forward again. Then it’ll store 5 bytes of characters read in the buffer, and return `5` to indicate it’s successfully read 5 bytes. 
+		- Calling `read()` in a loop on the same file will always overwrite the buffer with the new characters read, as it uses the same memory. 
+		- What happens when we call `read()` again but there are less bytes than `n` to read before the end of a file?
+			- It’ll read the remaining bytes, then stores the read characters in the buffer, then returns the number of bytes it’s read, and when it’s finished reading the file, it returns `0`. 
+			- If we call `read()` again on the file, it’ll return us `0` because it will have succeeded in reading `0` bytes as it’s at the end of the file. 
+			- If there are errors, it’ll return `1`. 
+
+4. `close()`:
+	- Tells the operating system that you are done with a file descriptor and closes the file pointed to by the file descriptor. 
+	- This function is defined in the `unistd.h` header file.
+	- Prototype: `int close(int fd);`
+
+
+## 🔵 Step 4: Learn Dynamic memory allocation functions
 
 
 ## 🔵 Learn:
@@ -243,51 +290,6 @@ The return value of `get_next_line()` then, is the line that was read from a fil
 
 
 
-
-## 2. File descriptors & File I/O functions:
-
-1. File Descriptors are a key concept in Unix and Unix-like operating systems. 
-	- They are used to manage input and output operations in C programming. 
-	- A file descriptor is an integer that uniquely identifies an open file in an operating system.
-	- Standard input `stdin`, standard output `stdout`, and standard error `stderr` are the first three file descriptors that are used by default on an operating system that is similar to Unix. 
-	- When any process begins, the file descriptors table for that process opens automatically with its `fd`  `0`, `1`, and `2` entries. Each of these three `fd` references an item in the `file table` for a file called `/dev/tty`.
-	- C programming provides a number of in-built functions to support reading from and writing to files. 
-	- The open(), read(), write() and close() used to perform input/output system calls are located in the `unistd.h` library.
-
-2. `open()`:
-	- Is used to open a file for reading, writing, or both. 
-	- This function can also create a file if it does not already exist. 
-	- The flags that are passed as arguments are defined inside the `fcntl.h` header file.
-	- prototype: `int open(const char *pathname, int flags);`
-
-3. `read()`:
-	- Reads a specified number of bytes (indicated by `cnt`) from a file (indicated by the file descriptor `fd`) into a memory area (indicated by `buf`). 
-	- A successful read() updates the access time for the file.
-	- Prototype: `ssize_t read(int fd, void *buf, size_t cnt);`
-		- Here, `fd` is the file descriptor from which to read, `buf` is the buffer into which to read, and `cnt` is the number of bytes to read.
-	- `read()` returns a `ssize_t` which is an integer. 
-	- We send it a file descriptor, which is an integer.
-	- We send it a pointer of type `void` which is a buffer.
-	- We send it a second `size_t` which is a number of bytes. 
-	- So, `read()` will read from a file, then store what it read in a variable. 
-	- On objects capable of seeking, the `read()` starts at a position given by the pointer associated with `fd`.
-	- Upon return from `read()`, the pointer is incremented by the number of bytes actually read. 
-	- So, when you call it for the first time on a file, the pointer will be positioned right before the first character of that file. 
-		- Then, you tell it to “read n bytes”, and say, `n = 5`, and it’ll read 5 bytes of characters, while advancing the pointer five bytes forward. 
-		- Then, you tell it to “store the 5 characters read in the buffer I’ve sent you”, and it’ll store them in the buffer. 
-		- Finally, it returns the number of bytes it successfully read. 
-	- Calling `read()` again on the same file that was just read, it’ll remember the position of the pointer which will be where it last read from, as it’s associated with the file descriptor. 
-		- So, the pointer stays where it last was, at the end of the first call, and up calling it again it’ll know what it’s already read. 
-		- We tell it to read 5 bytes again, and it’ll read 5 bytes then increment the pointer 5 bytes forward again. Then it’ll store 5 bytes of characters read in the buffer, and return `5` to indicate it’s successfully read 5 bytes. 
-	- Calling `read()` in a loop on the same file will always overwrite the buffer with the new characters read, as it uses the same memory. 
-	- What happens when we call `read()` again but there are less bytes than `n` to read before the end of a file?
-		- It’ll read the remaining bytes, then stores the read characters in the buffer, then returns the number of bytes it’s read, and when it’s finished reading the file, it returns `0`. 
-		- If we call `read()` again on the file, it’ll return us `0` because it will have succeeded in reading `0` bytes as it’s at the end of the file. 
-		- If there are errors, it’ll return `1`. 
-4. `close()`:
-	- Tells the operating system that you are done with a file descriptor and closes the file pointed to by the file descriptor. 
-	- This function is defined in the `unistd.h` header file.
-	- Prototype: `int close(int fd);`
 
 
 ## 3. Coding get_next_line:
