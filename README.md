@@ -21,7 +21,7 @@ This project helps us understand more about:
 	- Step 2: [Learn Static Variables](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-2-learn-static-variables)
 	- Step 3: [Learn File descriptors and File I/O functions](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-learn-file-descriptors-and-file-io-functions)
 	- Step 4: [Learn Dynamic memory allocation functions](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-4-learn-dynamic-memory-allocation-functions)
-	- Step 5: Learn the `-D BUFFER_SIZE` flag
+	- Step 5: [Learn the `-D BUFFER_SIZE` flag](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-5-learn-the--d-buffer_size-flag)
 	- Step 6: Understand get_next_line
 	- Step 7: Code get_next_line
 
@@ -291,27 +291,39 @@ get_next_line/
 
 ## 🔵 Step 5: Learn the `-D BUFFER_SIZE` flag
 
-1. 
+1. 🔹 **The -D flag in C:**
+	- is used to define a macro that can be used within the code. 
+	- It's used in the command line while compiling the code. 
+	- The syntax is `-D name`, where `name` is the name of the macro to be defined. 
+	- This can be followed by `=` and the value to assign to the macro, if any.
+	
+2. 🔹 **BUFFER_SIZE** 
+	- For example, in our case `-D BUFFER_SIZE=42` would define a macro named `BUFFER_SIZE` with a value of `42`. This macro can then be used in our code as if it were a constant.
+	- In our `get_next_line`, we define a `BUFFER_SIZE` to read chunks of a file in the function. 
+	- The `BUFFER_SIZE`` is used in the `read()` function, which reads at most `BUFFER_SIZE` number of bytes from the file into the buffer:
+		```
+		ssize_t read(int fd, void *buf, size_t cnt);
+		```
 
-    
+    - Recall, `fd` is a file descriptor pointing to the file to be read. `buf` is a buffer where the read content will be stored, and `cnt` is the number of bytes to read from the file.
+	- When we compile our program with `-D BUFFER_SIZE=42`, this would mean that `read()` will read in chunks of `42` bytes at a time from the file, until it reaches the end of the file. 
+
+3. 🔹 **Defining the default in the `get_next_line.h` file**
+	- In case the "-D BUFFER_SIZE flag" being omitted during compiling (as instructed in the .pdf), we need to define a default buffer size within our header file. 
 
 
+## 🔵 Step 6: Understand get_next_line
 
-Nikito: https://www.youtube.com/watch?v=-Mt2FdJjVno&t=164s
+1. Recall, file descriptors “fd” is a reference to a file that is opened on your computer. 
+	- We tell `get_next_line()` to go look in this file, and return us a string of characters, which will be the line that was read from the file.
 
-Recall, file descriptors “fd” is a reference to a file that is open on your computer. 
+2. The first time we call `get_next_line()`, it’ll retrieve the first line of the file.
+	- Thereafter, we should be able to read the entire file by calling `get_next_line()` in a loop on the file. 
+		- In a loop, after returning the first line of a file `line 1`, whenever `get_next_line()` is called again on the file, it will send the function the next line `line 2`, then `line 3`, and so on, until there are no more lines to read from in the file. 
 
-We tell `get_next_line()` to go look in this file, and return is a string of characters, which will be the line that was read from the file.
+3. The return value of `get_next_line()`, is the line that was read from a file, if successful. 
+	- If not successful, i.e. there are no more lines to read, or there is an error during execution, it’ll return `NULL`. 
 
-The first time you call `get_next_line()`, it’ll retrieve the `first line` of the file, and then you should be able to read the entire file calling `get_next_line()` in a loop on the file. In a loop, after returning the first line of a file `line 1`, each time `get_next_line()` is called again on the file, it will send the function the next line `line 2`, then `line 3`, and so on, until there are no more lines to read from in the file. 
-
-The return value of `get_next_line()` then, is the line that was read from a file, if successful. If not successful, I.e. there are no more lines to read, or there is an error during execution, it’ll return `NULL`. 
-
-
-
-
-
-## 3. Coding get_next_line:
 
 1. Recall, the size of the buffer will be defined at compilation, so it’ll vary, and will be dependent on the user telling `read()` how many bytes of the file they want read.
 	- e.g. `cc -Wall -Wextra -Werror -D Buffer_size=42 <files>.c`.

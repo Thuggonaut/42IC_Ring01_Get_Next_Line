@@ -4,7 +4,7 @@
 # include <unistd.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE 42 //Set a default buffer size in case it is not set at compile time
 # endif
 
 size_t  ft_strlen(const char *s); //Needed in `ft_strjoin()` and `ft_strdup()` to calculate the lengths of input strings to determine the size of the new strings that needs to be allocated by `malloc()`
