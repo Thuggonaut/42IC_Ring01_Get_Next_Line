@@ -18,7 +18,7 @@ This project helps us understand more about:
 - I give credit to Nikito, who's video helped me understand how the function works. [Watch his video here:](https://www.youtube.com/watch?v=-Mt2FdJjVno&t=164s)
 - We will be completing both the [Mandatory](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-the-mandatory-part) and [Bonus](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-the-bonus-part) parts. Here is the outline:
 - Step 1: [Write the structure of directories and files required](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-structure-of-directories-and-files)
-- Step 2: Learn Static Variables
+- Step 2: [Learn Static Variables](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-2-learn-static-variables)
 - Step 3: Learn File descriptors and File I/O functions
 - Step 4: Learn Dynamic memory allocation functions
 - Step 5: Learn the `-D BUFFER_SIZE` flag
@@ -89,11 +89,11 @@ get_next_line/
 
 ## 🔵 Step 2: Learn Static Variables:
 
-1. A static variable in C is a special type of variable that retains its value across multiple function calls and persists throughout the entire execution of the program.
-	- This is in contrast to automatic variables, which lose their value once the function they are declared in completes execution.
+1. ####A static variable in C
+	- is a special in that it retains its value across multiple function calls and persists throughout the entire execution of the program.
 	- In the case of our `get_next_line.c`, a static variable (e.g. `string`) retains its value between function calls. 
 		- Without `static`, `string` would be reinitialised to its default value every time `get_next_line()` is called (for example, in a loop).
-		- With `static`, once `string` is initialised, it keeps its value until the program ends. This is important for the function to remember the `string` between calls. For example, it needs to remember the remainder of a line after a newline character is found.
+		- With `static`, once `string` is initialised, it keeps its value until the program ends. This is important for the function to remember the `string` between calls. For example, it needs to remember the remainder of a line after a `\n` is found. When the function is called again, it's able to pick up where it left off. This will make more sense later. 
 
 2. Syntax:
 	- `static data_type variable_name = initial_value;`
