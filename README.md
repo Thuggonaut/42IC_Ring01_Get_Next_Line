@@ -110,7 +110,7 @@ get_next_line/
 		- A static variable is initialized only once during program execution, at the time of program loading.
 	- Thread Safety: 
 		- Static variables are not thread-safe by default. 
-		<sub>- A thread in programming is a small set of instructions that are scheduled and executed independently by the Central Processing Unit (CPU) of a computer. 
+		<sub>- A thread in programming is a small set of instructions that are scheduled and executed independently by the Central Processing Unit (CPU) of a computer.</sub> 
 		- All threads of a process share the same address space, and since a static variable has a fixed address, its state is shared by all the threads.
 		- If multiple threads access the same static variable simultaneously, it can lead to race conditions and unexpected behavior. 
 			- A race condition arises when the outcome of a program depends on the indeterministic ordering of operations in different threads.
