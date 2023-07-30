@@ -20,7 +20,7 @@ This project helps us understand more about:
 	- Step 1: [Write the structure of directories and files required](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-structure-of-directories-and-files)
 	- Step 2: [Learn Static Variables](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-2-learn-static-variables)
 	- Step 3: [Learn File descriptors and File I/O functions](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-learn-file-descriptors-and-file-io-functions)
-	- Step 4: Learn Dynamic memory allocation functions
+	- Step 4: [Learn Dynamic memory allocation functions](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-4-learn-dynamic-memory-allocation-functions)
 	- Step 5: Learn the `-D BUFFER_SIZE` flag
 	- Step 6: Understand get_next_line
 	- Step 7: Code get_next_line
@@ -214,6 +214,10 @@ get_next_line/
 
 
 ## 🔵 Step 3: Learn File descriptors and File I/O functions
+- `open()`
+- `read()`
+- `close()`
+- These functions will help you read from the file descriptor provided.
 
 1. File Descriptors are a key concept in Unix and Unix-like operating systems. 
 	- They are used to manage input and output operations in C programming. 
@@ -262,20 +266,35 @@ get_next_line/
 
 
 ## 🔵 Step 4: Learn Dynamic memory allocation functions
+- `malloc()`
+- `free()`
+- These functions will help you manage memory for the lines read from the file descriptor. 
+
+1. `malloc()``: 
+	- This function is used to allocate a block of memory dynamically. 
+	- When using `malloc()`, you will need to specify the amount of memory you want to allocate in bytes. For example:
+	```
+	int *ptr = (int *)malloc(10 * sizeof(int));  // Allocate memory for 10 integers
+	```
+2. `free()`: 
+	- This function is used when you have finished with a dynamically allocated block of memory. 
+	- By passing the pointer to this block to `free()``, you can return this memory to the system so it can be reused later. For example:
+	```
+	free(ptr);
+  	ptr = NULL;  // It is good practice to set your pointer to NULL after freeing it
+	```
+
+3. In our `get_next_line`` function, we'll need to be sure to free any memory we allocate once we're done using it. 
+	- This will likely be at the end of the function, once we've read and returned a line. 
+	- Not doing so can result in memory leaks, where parts of memory can't be used again until the program ends, which can eventually cause the program to run out of memory and crash.
 
 
-## 🔵 Learn:
-2. File descriptors and File I/O functions:
-    - `open()`
-    - `read()`
-    - `close()`
-    - These functions will help you read from the file descriptor provided.
-3. Dynamic memory allocation:
-    - `malloc()`
-    - `realloc()` 
-    - `free()`
-    - These functions will help you manage memory for the lines read from the file descriptor. 
-4. The `-D BUFFER_SIZE` flag
+## 🔵 Step 5: Learn the `-D BUFFER_SIZE` flag
+
+1. 
+
+    
+
 
 
 Nikito: https://www.youtube.com/watch?v=-Mt2FdJjVno&t=164s
