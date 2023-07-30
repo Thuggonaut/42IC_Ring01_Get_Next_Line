@@ -89,16 +89,16 @@ get_next_line/
 
 ## 🔵 Step 2: Learn Static Variables:
 
-1. 🔹 **A static variable in C**
+1. 🔹 **A static variable in C:**
 	- is a special in that it retains its value across multiple function calls and persists throughout the entire execution of the program.
 	- In the case of our `get_next_line.c`, a static variable (e.g. `string`) retains its value between function calls. 
 		- Without `static`, `string` would be reinitialised to its default value every time `get_next_line()` is called (for example, in a loop).
 		- With `static`, once `string` is initialised, it keeps its value until the program ends. This is important for the function to remember the `string` between calls. For example, it needs to remember the remainder of a line after a `\n` is found. When the function is called again, it's able to pick up where it left off. This will make more sense later. 
 
-2. Syntax:
+2. 🔹 **Syntax:**
 	- `static data_type variable_name = initial_value;`
 	
-3. Properties of static variables in C:
+3. 🔹 **Properties of static variables in C:**
 	- Lifetime: 
 		- The lifetime of a static variable extends throughout the entire execution of the program.
 	- Scope: 
@@ -110,10 +110,13 @@ get_next_line/
 		- A static variable is initialized only once during program execution, at the time of program loading.
 	- Thread Safety: 
 		- Static variables are not thread-safe by default. 
+		<sub>- A thread in programming is a small set of instructions that are scheduled and executed independently by the Central Processing Unit (CPU) of a computer. 
 		- All threads of a process share the same address space, and since a static variable has a fixed address, its state is shared by all the threads.
 		- If multiple threads access the same static variable simultaneously, it can lead to race conditions and unexpected behavior. 
-		- A race condition arises when the outcome of a program depends on the indeterministic ordering of operations in different threads.
-4. Example of a Static Variable in C:
+			- A race condition arises when the outcome of a program depends on the indeterministic ordering of operations in different threads.
+		- In the context of `get_next_line`, it reads from a file descriptor and stores interim results in a static variable, which retains its value across multiple calls to the function. However, if you have multiple threads in your program and they're all calling get_next_line concurrently, they could all attempt to access and modify this static variable simultaneously, which could lead to inconsistent results or errors. This concept is referred to as thread safety.</sub>
+
+4. 🔹 Example of a Static Variable in C:
 	```
 	#include <stdio.h>
 
@@ -137,7 +140,7 @@ get_next_line/
 		- Each time the function is called, `count` is incremented by one and its updated value is printed to the console. 
 		- Because `count` is a static variable, it retains its value between function calls, allowing it to track the total number of times `countFunctionCalls` is called during the program's execution.
 
-5. Difference Between Static Global and Static Local Variables:
+5. 🔹 Difference Between Static Global and Static Local Variables:
 	- A static global variable is declared outside the main function and can be used anywhere inside the program, whereas a static local variable is declared inside a function or a block and can only be used within the scope in which it is declared.
 	- A static global variable is not accessible outside the program. 
 	- Example of both a static global variable and a static local variable:
@@ -165,7 +168,7 @@ get_next_line/
    	- In the above example, `global_static_var` can be accessed by any function in the file, while `local_static_var` can only be accessed within the func function.
 	- Both local and global static variables have static storage duration, meaning they exist for the entire lifetime of the program. They are created and initialized only once and keep their value between function calls or blocks.
 
- 6. Visibility:
+ 6. 🔹 Visibility:
 	- The visibility of a variable refers to the parts of the code from which a variable can be accessed or referred to.
 	- A local static variable is only visible within the function or block where it is declared.
 	- A global static variable is visible to all functions in the file where it is declared, but it is not visible to other files. 
@@ -204,7 +207,7 @@ get_next_line/
 	- In the above example, the `global_static_var` is a `global static` variable declared in file1.c. 
 	- It can be accessed by the `func1` function in the same file, but cannot be accessed by the `func2` function in `file2.c`.
 
-7. A static variable’s memory is allocated in the data segment of the program’s memory, rather than the stack.
+7. 🔹 A static variable’s memory is allocated in the data segment of the program’s memory, rather than the stack.
 	- Memory allocation for static variables is done at the time of program startup, and they live until the program ends. 
 	- They cannot be "freed" or "reallocation”.
 	- Static variables are stored in the `.BSS (Block Started by Symbol) segment` for non-initialized static variables and `.DATA segment` for initialized static variables. The actual storage location of the data will be implementation dependent.
@@ -261,7 +264,7 @@ get_next_line/
 	- It's important to note that static variables are not stored on the heap. 
 	- They are stored in the BSS segment if they are uninitialized and in the data segment if they are initialized.
 
-8. In summary, static variables in C are an important feature that allow for the creation of variables that persist throughout the program’s execution, reducing the need for recomputing values and optimizing performance. However, it's important to be aware of potential issues that can arise when using static variables in a multi-threaded environment or when accessing them outside of their defined scope.
+8. 🔹 In summary, static variables in C are an important feature that allow for the creation of variables that persist throughout the program’s execution, reducing the need for recomputing values and optimizing performance. However, it's important to be aware of potential issues that can arise when using static variables in a multi-threaded environment or when accessing them outside of their defined scope.
 
 
 
