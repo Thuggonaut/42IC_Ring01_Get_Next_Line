@@ -15,14 +15,15 @@ This project helps us understand more about:
 
 ## 🔵 Preface:
 - This project is the most challenging in Ring01 imo, but as usual, I learn best by drafting a plan, tackling new concepts, and write too many notes (If you read them, you will probably need eye drops).
-- I give credit to Nikito, who's video helped me understand how the function works. Watch his video here: https://www.youtube.com/watch?v=-Mt2FdJjVno&t=164s 
-- We will be completing both the Mandatory and Bonus parts. Here is the outline:
-- Step 1: Write the structure of directories and files required
+- I give credit to Nikito, who's video helped me understand how the function works. [Watch his video here:](https://www.youtube.com/watch?v=-Mt2FdJjVno&t=164s)
+- We will be completing both the [Mandatory](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-the-mandatory-part) and [Bonus](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-the-bonus-part) parts. Here is the outline:
+- Step 1: [Write the structure of directories and files required](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-structure-of-directories-and-files)
 - Step 2: Learn Static Variables
 - Step 3: Learn File descriptors and File I/O functions
 - Step 4: Learn Dynamic memory allocation functions
 - Step 5: Learn the `-D BUFFER_SIZE` flag
-- Step 6: Coding get_next_line
+- Step 6: Understand get_next_line
+- Step 7: Code get_next_line
 
 
 ## 🔵 The Mandatory part:
@@ -74,7 +75,7 @@ Create a function called `get_next_line()` that takes in a file descriptor to re
        - `get_next_line_bonus.h`
 
 
-## 🔵 Structure of directories and files:
+## 🔵 Step 1: Structure of directories and files:
 ```
 get_next_line/
 │
@@ -86,33 +87,7 @@ get_next_line/
 └── get_next_line_bonus.h
 ```
 
-## 🔵 Learn:
-1. Static Variables
-2. File descriptors and File I/O functions:
-    - `open()`
-    - `read()`
-    - `close()`
-    - These functions will help you read from the file descriptor provided.
-3. Dynamic memory allocation:
-    - `malloc()`
-    - `realloc()` 
-    - `free()`
-    - These functions will help you manage memory for the lines read from the file descriptor. 
-4. The `-D BUFFER_SIZE` flag
-
-
-Nikito: https://www.youtube.com/watch?v=-Mt2FdJjVno&t=164s
-
-Recall, file descriptors “fd” is a reference to a file that is open on your computer. 
-
-We tell `get_next_line()` to go look in this file, and return is a string of characters, which will be the line that was read from the file.
-
-The first time you call `get_next_line()`, it’ll retrieve the `first line` of the file, and then you should be able to read the entire file calling `get_next_line()` in a loop on the file. In a loop, after returning the first line of a file `line 1`, each time `get_next_line()` is called again on the file, it will send the function the next line `line 2`, then `line 3`, and so on, until there are no more lines to read from in the file. 
-
-The return value of `get_next_line()` then, is the line that was read from a file, if successful. If not successful, I.e. there are no more lines to read, or there is an error during execution, it’ll return `NULL`. 
-
-
-## 1. Static variables:
+## 🔵 Step 2: Learn Static Variables:
 
 1. A static variable in C is a special type of variable that retains its value across multiple function calls and persists throughout the entire execution of the program.
 	- This is in contrast to automatic variables, which lose their value once the function they are declared in completes execution.
@@ -287,6 +262,37 @@ The return value of `get_next_line()` then, is the line that was read from a fil
 	- They are stored in the BSS segment if they are uninitialized and in the data segment if they are initialized.
 
 8. In summary, static variables in C are an important feature that allow for the creation of variables that persist throughout the program’s execution, reducing the need for recomputing values and optimizing performance. However, it's important to be aware of potential issues that can arise when using static variables in a multi-threaded environment or when accessing them outside of their defined scope.
+
+
+
+
+
+
+## 🔵 Learn:
+2. File descriptors and File I/O functions:
+    - `open()`
+    - `read()`
+    - `close()`
+    - These functions will help you read from the file descriptor provided.
+3. Dynamic memory allocation:
+    - `malloc()`
+    - `realloc()` 
+    - `free()`
+    - These functions will help you manage memory for the lines read from the file descriptor. 
+4. The `-D BUFFER_SIZE` flag
+
+
+Nikito: https://www.youtube.com/watch?v=-Mt2FdJjVno&t=164s
+
+Recall, file descriptors “fd” is a reference to a file that is open on your computer. 
+
+We tell `get_next_line()` to go look in this file, and return is a string of characters, which will be the line that was read from the file.
+
+The first time you call `get_next_line()`, it’ll retrieve the `first line` of the file, and then you should be able to read the entire file calling `get_next_line()` in a loop on the file. In a loop, after returning the first line of a file `line 1`, each time `get_next_line()` is called again on the file, it will send the function the next line `line 2`, then `line 3`, and so on, until there are no more lines to read from in the file. 
+
+The return value of `get_next_line()` then, is the line that was read from a file, if successful. If not successful, I.e. there are no more lines to read, or there is an error during execution, it’ll return `NULL`. 
+
+
 
 
 ## 2. File descriptors & File I/O functions:
