@@ -81,21 +81,23 @@ char	*ft_get_line(char **stash) //Define a function that takes a pointer to a st
 	return (line); //Return the line that was extracted from `stash`
 }
 
-char	*ft_line_read(int fd, char *line, char **stash) //Define a function that takes a file descriptor, a pointer to a string, a pointer to a string array, and returns the extracted line from `stash`
+char	*ft_line_read(int fd, char *line_read, char **stash) //Define a function that takes a file descriptor, a pointer to a string, a pointer to a string array, and returns the extracted line from `stash`
 {
 	int			read_bytes; //Declare an integer variable that will store the number of bytes read from the file descriptor
 	char		*tmp_buff; //Declare a pointer variable that will store the old `stash`, while the new `stash` needs updating
 
-	while (!(ft_strchr(line, '\n')) && (read_bytes = read(fd, line, BUFFER_SIZE))) //Loop until a `\n` is found in `line`, and assign to `read_bytes`, the number of bytes actually read. If bytes read is `-1`, an error has occurred or there is no more data to read from `fd`, and this condition will be `false`. See #5
+	while ((read_bytes = read(fd, line_read, BUFFER_SIZE))) //Loop and assign to `read_bytes`, the number of bytes succeffully read. If bytes read is `-1`, an error has occurred or there is no more data to read from `fd`, this condition will be `false`. See #5
 	{
-		line[read_bytes] = '\0'; //Ensure `line` is properly null terminated as `read()` does not add a `\0` at the end of the data it reads
+		line_read[read_bytes] = '\0'; //Ensure `line_read` is properly null terminated as `read()` does not add a `\0` at the end of the data it reads
 		tmp_buff = *stash; //Assign to `tmp_buff` the characters from `stash` before `stash` is updated next
-		*stash = ft_strjoin(tmp_buff, line); //`stash` is updated to be a new string created by `ft_strjoin()`, that is the concatenation of the old `stash` and `line`
+		*stash = ft_strjoin(tmp_buff, line_read); //`stash` is updated to be a new string created by `ft_strjoin()`, that is the concatenation of the old `stash` and `line_read`
 		free(tmp_buff); //Free the old `stash` now stored in `tmp_buff`. See #3
 		tmp_buff = NULL; //Set to `NULL` to avoid dangling pointers. See #3
+    if (ft_strchr(line_read, '\n'))
+		  break;
 	}
-	free(line); //`line` is a buffer, used to temporarily hold data read from a file descriptor. After this data has been appended to `stash`, it is no longer needed in `line`
-	line = NULL; //Set to `NULL` because there are no characters left in `line` to process. See #4
+	free(line_read); //`line_read` is a buffer, used to temporarily hold data read from a file descriptor. After this data has been appended to `stash`, it is no longer needed in `line_read`
+	line_read = NULL; //Set to `NULL` because there are no characters left in `line_read` to process. See #4
 	return (ft_get_line(stash)); //`ft_get_line()` is called on `stash` to extract the next line from `stash`
 }
 

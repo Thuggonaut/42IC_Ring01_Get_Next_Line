@@ -270,7 +270,7 @@ get_next_line/
 - `free()`
 - These functions will help you manage memory for the lines read from the file descriptor. 
 
-1. `malloc()``: 
+1. `malloc()`: 
 	- This function is used to allocate a block of memory dynamically. 
 	- When using `malloc()`, you will need to specify the amount of memory you want to allocate in bytes. For example:
 	```
@@ -278,13 +278,13 @@ get_next_line/
 	```
 2. `free()`: 
 	- This function is used when you have finished with a dynamically allocated block of memory. 
-	- By passing the pointer to this block to `free()``, you can return this memory to the system so it can be reused later. For example:
+	- By passing the pointer to this block to `free()`, you can return this memory to the system so it can be reused later. For example:
 	```
 	free(ptr);
   	ptr = NULL;  // It is good practice to set your pointer to NULL after freeing it
 	```
 
-3. In our `get_next_line`` function, we'll need to be sure to free any memory we allocate once we're done using it. 
+3. In our `get_next_line` function, we'll need to be sure to free any memory we allocate once we're done using it. 
 	- This will likely be at the end of the function, once we've read and returned a line. 
 	- Not doing so can result in memory leaks, where parts of memory can't be used again until the program ends, which can eventually cause the program to run out of memory and crash.
 
@@ -359,9 +359,9 @@ Now that we understand how `get_next_line()` should function, after a chunk of b
 1. 🔹 We need to locate the `\n` whenever it is encountered in our `stash` string (the characters that has been read).
 	- Recall, from our libft library, `ft_strchr()` searches for a character within a string.
 
-2. 🔹 When a `\n` is encountered in `stash`, we will need to extract from it, a line of characters from the begining of `stash`, and up to the `\n`.
+2. 🔹 When a `\n` is encountered in `stash`, we will need to extract from it, a line of characters from the begining of `stash`, up to the `\n`.
 	- We can create a helper function to do this, call it `ft_get_line()`, and make it return said `line`. 
-	- We will need to account for, if the end of `stash` is a `\0` signalling the end of a file. 
+	- We will need to account for, if the end of `stash` is a `\0`, which could signal no `\n` is found, or the end of the file is reached. 
 	- `stash` then needs to be updated, to begin after the previously read `\n`, up to the end of `stash`. 
 		- The old `stash` now needs to be updated to a new `stash` because the line in the old, will have already been assigned into `line`, so we no longer need it in `stash`. 
 
@@ -374,5 +374,25 @@ Now that we understand how `get_next_line()` should function, after a chunk of b
 	- Recall, from our libft library, `ft_strlen()` calculates the length of a string, not including the `\0`.
 	- We can use `ft_substr()` to allocate memory, `ft_strlen()` to calculate the length of `stash`, and pointer arithmetic to copy the characters needed. 
 
-5. 🔹 Currently, we have the extracted `line`, and we have an updated `stash`. 
+5. 🔹 Currently, we have a function `ft_get_line()` that extracts a `line` up to a `\n` from `stash`, then updates our `stash` to point to where it last left off - the character after the `\n`. 
+	- Before we call `ft_get_line()` however, we will need a helper function that first reads `BUFFER_SIZE` bytes from the `fd` and store it in a buffer `line`.
+	- We will call it `ft_line_read()`, and make it return the extracted `line` from `stash` by calling `ft_get_line()`.
+	- Let's write some pseudo code to see how this might all come together:
+	```
+	//Read `BUFFER_SIZE` bytes from `fd` and return the number of bytes successfully read
+		//Store the bytes read into the buffer `line`
+
+	//If a `\n` is not encountered in `line`
+		//Properly null terminate `line`
+		//Update `stash` as a new string using `malloc()` to contain the contents of `line`
+		//Free the buffer `line` as it's no longer needed
+		//Send the new `stash` to `ft_get_line()`
+			//`ft_get_line()` searches for a `\n` for extraction, however, since this is the first call of `ft_line_read()` and no `\n` is found, `ft_get_line()` will simply return a line with `stash` in it unchanged.
+
+	//If a `\n` is encountered in the buffer `line` 
+		//Free the buffer `line`
+		//Send `stash` to `ft_get_line()`
+
+
+	```
 

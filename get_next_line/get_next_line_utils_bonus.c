@@ -78,23 +78,25 @@ char	*ft_get_line(char **stash)
 		line = *stash; 
 		*stash = NULL; 
 	}
-	return (line);  `
+	return (line); 
 }
 
-char	*ft_line_read(int fd, char *line, char **stash)  
+char	*ft_line_read(int fd, char *line_read, char **stash)  
 {
 	int			read_bytes; 
 	char		*tmp_buff; 
 
-	while (!(ft_strchr(line, '\n')) && (read_bytes = read(fd, line, BUFFER_SIZE)))
+	while ((read_bytes = read(fd, line_read, BUFFER_SIZE)))
 	{
-		line[read_bytes] = '\0'; 
+		line_read[read_bytes] = '\0'; 
 		tmp_buff = *stash; 
-		*stash = ft_strjoin(tmp_buff, line); 
+		*stash = ft_strjoin(tmp_buff, line_read); 
 		free(tmp_buff);
-		tmp_buff = NULL; 
+		tmp_buff = NULL;
+        if (ft_strchr(line_read, '\n'))
+            break;
 	}
-	free(line); 
-	line = NULL; 
+	free(line_read); 
+	line_read = NULL; 
 	return (ft_get_line(stash));
 }
