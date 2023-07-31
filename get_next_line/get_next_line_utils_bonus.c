@@ -10,14 +10,6 @@ size_t ft_strlen(const char *s)
     return (s - start - 1);  
 }
 
-char *ft_strchr(const char *s, int c)  
-{
-    while (*s != (char)c)  
-        if (!*s++)  
-            return (NULL);  
-    return (char *)s;  
-}
-
 char *ft_strjoin(char *s1, char *s2)  
 {
     size_t len1;  
@@ -93,8 +85,6 @@ char	*ft_line_read(int fd, char *line_read, char **stash)
 		*stash = ft_strjoin(tmp_buff, line_read); 
 		free(tmp_buff);
 		tmp_buff = NULL;
-        if (ft_strchr(line_read, '\n'))
-            break;
 	}
 	free(line_read); 
 	line_read = NULL; 

@@ -10,14 +10,6 @@ size_t ft_strlen(const char *s) //Define a function that takes a pointer to a st
     return (s - start - 1); //`s` is now pointing to the end of `s`. The resulting length of `s` is calulated by subtracting the final position of `start` of the string (index `0`) from the position of `s`. The `-1` is to account for the extra increment for the `\0`
 }
 
-char *ft_strchr(const char *s, int c) //Define a function that takes a pointer to a string, an integer that represents a char, and returns a pointer to the first occurrence of the character `c` in the string `s`
-{
-    while (*s != (char)c) //Loop as long as the current character in the string is not the character we are searching for. `c` is casted to `char` to make comparison possible
-        if (!*s++) //Move to the next character in the string for processing in the next loop, and check if it is the `\0`
-            return (NULL); //However if the end of the string has been reached, `NULL` is returned because `c` hasn't been found
-    return (char *)s; //If `c` has been found, return a pointer to the found character in `s`
-}
-
 char *ft_strjoin(char *s1, char *s2) //Define a function that takes pointers to two strings, concatenate the strings, and return a pointer to a newly created and allocated string that consists of the joined two strings
 {
     size_t len1; //Declare a variable to store the length of the first string
@@ -93,8 +85,6 @@ char	*ft_line_read(int fd, char *line_read, char **stash) //Define a function th
 		*stash = ft_strjoin(tmp_buff, line_read); //`stash` is updated to be a new string created by `ft_strjoin()`, that is the concatenation of the old `stash` and `line_read`
 		free(tmp_buff); //Free the old `stash` now stored in `tmp_buff`. See #3
 		tmp_buff = NULL; //Set to `NULL` to avoid dangling pointers. See #3
-    if (ft_strchr(line_read, '\n'))
-		  break;
 	}
 	free(line_read); //`line_read` is a buffer, used to temporarily hold data read from a file descriptor. After this data has been appended to `stash`, it is no longer needed in `line_read`
 	line_read = NULL; //Set to `NULL` because there are no characters left in `line_read` to process. See #4
