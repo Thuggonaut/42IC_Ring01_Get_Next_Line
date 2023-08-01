@@ -54,6 +54,7 @@ char	*ft_get_line(char **stash)
 	char		*tmp_buff; 
 	int			len;  
 
+	line = NULL;
 	len = 0;  
 	while ((*stash)[len] != '\n' && (*stash)[len] != '\0')  
 		len++;  
