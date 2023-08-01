@@ -1,6 +1,6 @@
 #include "get_next_line.h"
 
-char *get_next_line(int fd) //Define a function that takes in integer (a file descriptor), and returns a pointer to a character array (the line retrieved)
+char *get_next_line(int fd) //Define a function that takes in integer (a file descriptor), and returns a pointer to a character array (the line retrieved) of the current `fd`
 {
   static char *stash; //Declare a static character pointer to hold the remainder of a line after a newline character is found
   char *line; //Declare a character pointer to hold the current line being read

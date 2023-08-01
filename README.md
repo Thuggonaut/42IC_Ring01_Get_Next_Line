@@ -251,7 +251,7 @@ get_next_line/
 		- Then, you tell it to “store the 5 characters read in the buffer I’ve sent you”, and it’ll store them in the buffer. 
 		- Finally, it returns the number of bytes it successfully read. 
 		- Calling `read()` again on the same file that was just read, it’ll remember the position of the pointer which will be where it last read from, as it’s associated with the file descriptor. 
-			- So, the pointer stays where it last was, at the end of the first call, and up calling it again it’ll know what it’s already read. 
+			- So, the pointer stays where it last was, at the end of the first call, and upon calling it again it’ll know what it’s already read. 
 			- We tell it to read 5 bytes again, and it’ll read 5 bytes then increment the pointer 5 bytes forward again. Then it’ll store 5 bytes of characters read in the buffer, and return `5` to indicate it’s successfully read 5 bytes. 
 		- Calling `read()` in a loop on the same file will always overwrite the buffer with the new characters read, as it uses the same memory. 
 		- What happens when we call `read()` again but there are less bytes than `n` to read before the end of a file?
