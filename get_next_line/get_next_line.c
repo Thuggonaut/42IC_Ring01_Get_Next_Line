@@ -18,7 +18,7 @@ TO TEST:
 
 int main(void)
 {
-    int fd = open("file1.txt", O_RDONLY);
+    int fd = open("test1.txt", O_RDONLY);
     char *line;
 
     if (fd < 0 )
@@ -26,7 +26,7 @@ int main(void)
         printf("Error opening files\n");
         return (1);
     }
-    printf("Reading from file1.txt:\n");
+    printf("Reading from test1.txt:\n");
     while ((line = get_next_line(fd)) != NULL)
     {
         printf("%s\n", line);

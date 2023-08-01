@@ -10,6 +10,23 @@ size_t ft_strlen(const char *s) //Define a function that takes a pointer to a st
     return (s - start - 1); //`s` is now pointing to the end of `s`. The resulting length of `s` is calulated by subtracting the final position of `start` of the string (index `0`) from the position of `s`. The `-1` is to account for the extra increment for the `\0`
 }
 
+char *ft_substr(char const *s, unsigned int start, size_t len) //Define a function that takes a pointer to a string, an integer representing the starting index from where to copy, the length of characters to copy, and returns a pointer to the extracted string
+{
+    char    *substr; //Declare a char pointer variable that will store a pointer to the extracted portion of a string
+    size_t  i; //Declare a size_t variable that will be used as a counter to keep track of the number of characters copied from `s` to `substr` and ensures no more characters than specified by `len` are copied
+
+    i = 0; //Initialised to `0` because no copying has been done
+    if (!s || !(substr = malloc((len + 1) * sizeof(char)))) //Checks for an invalid input string `s`, and whether memory allocation has failed
+        return (NULL); //If either are true, return `NULL`
+    while (i < len && *(s + start + i)) //Loop as long as there are more characters to copy (i < len), and the `i-th` character of `s` from the `start` position is not `\n`
+    {
+        *(substr + i) = *(s + start + i); //Copy the `i-th` character from the `start` position in `s` to the `i-th` position in `substr`. See #2
+        i++; //Move to the next character in `s`, and the next index in `substr` for processing
+    }
+    *(substr + i) = '\0'; //Ensure the new string is properly null terminated
+    return (substr); //Return a pointer to the begining of the new string
+}
+
 char *ft_strjoin(char *s1, char *s2) //Define a function that takes pointers to two strings, concatenate the strings, and return a pointer to a newly created and allocated string that consists of the joined two strings
 {
     size_t len1; //Declare a variable to store the length of the first string
@@ -29,23 +46,6 @@ char *ft_strjoin(char *s1, char *s2) //Define a function that takes pointers to 
         *p++ = *s2++; //Copy the current character of `s2` into the current index of `p`
     *p = '\0'; //Ensure the new string is properly null terminated
     return (str); //Return the pointer which remains pointed at the beginning of the newly created string
-}
-
-char *ft_substr(char const *s, unsigned int start, size_t len) //Define a function that takes a pointer to a string, an integer representing the starting index from where to copy, the length of characters to copy, and returns a pointer to the extracted string
-{
-    char    *substr; //Declare a char pointer variable that will store a pointer to the extracted portion of a string
-    size_t  i; //Declare a size_t variable that will be used as a counter to keep track of the number of characters copied from `s` to `substr` and ensures no more characters than specified by `len` are copied
-
-    i = 0; //Initialised to `0` because no copying has been done
-    if (!s || !(substr = malloc((len + 1) * sizeof(char)))) //Checks for an invalid input string `s`, and whether memory allocation has failed
-        return (NULL); //If either are true, return `NULL`
-    while (i < len && *(s + start + i)) //Loop as long as there are more characters to copy (i < len), and the `i-th` character of `s` from the `start` position is not `\n`
-    {
-        *(substr + i) = *(s + start + i); //Copy the `i-th` character from the `start` position in `s` to the `i-th` position in `substr`. See #2
-        i++; //Move to the next character in `s`, and the next index in `substr` for processing
-    }
-    *(substr + i) = '\0'; //Ensure the new string is properly null terminated
-    return (substr); //Return a pointer to the begining of the new string
 }
 
 char	*ft_get_line(char **stash) //Define a function that takes a pointer to a string array (a pointer to a pointer to a character), and returns an extracted `line` 

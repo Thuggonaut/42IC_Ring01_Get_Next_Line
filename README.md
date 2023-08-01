@@ -300,7 +300,7 @@ get_next_line/
 2. 🔹 **BUFFER_SIZE** 
 	- For example, in our case `-D BUFFER_SIZE=42` would define a macro named `BUFFER_SIZE` with a value of `42`. This macro can then be used in our code as if it were a constant.
 	- In our `get_next_line`, we define a `BUFFER_SIZE` to read chunks of a file in the function. 
-	- The `BUFFER_SIZE`` is used in the `read()` function, which reads at most `BUFFER_SIZE` number of bytes from the file into the buffer:
+	- The `BUFFER_SIZE` is used in the `read()` function, which reads at most `BUFFER_SIZE` number of bytes from the file into the buffer:
 		```
 		ssize_t read(int fd, void *buf, size_t cnt);
 		```
@@ -309,7 +309,7 @@ get_next_line/
 	- When we compile our program with `-D BUFFER_SIZE=42`, this would mean that `read()` will read in chunks of `42` bytes at a time from the file, until it reaches the end of the file. 
 
 3. 🔹 **Defining the default in the `get_next_line.h` file**
-	- In case the "-D BUFFER_SIZE flag" being omitted during compiling (as instructed in the .pdf), we need to define a default buffer size within our header file. 
+	- In case the "-D BUFFER_SIZE flag" is omitted during compiling (as instructed in the .pdf), we need to define a default buffer size within our header file. 
 
 
 ## 🔵 Step 6: Understand get_next_line
@@ -403,7 +403,7 @@ Now that we understand how `get_next_line()` should function, we will need to ha
 	//Read `BUFFER_SIZE` bytes from `fd` and return the number of bytes successfully read
 		//Store the bytes read into `line_read`
 		//Properly null terminate `line_read`
-		//Update `stash` as a new string to contain the contents of `line_read`, and the "leftovers" of `stash``
+		//Update `stash` as a new string to contain the contents of `line_read`, and the "leftovers" of `stash` (if any)
 		//Free the buffer `line_read` as it's no longer needed
 		
 	//Send the updated `stash` to `ft_get_line()`
@@ -415,5 +415,5 @@ Now that we understand how `get_next_line()` should function, we will need to ha
 
 	//If there is more data to read from `fd`, `get_next_line()` is called again, in a loop
 		//Between subsequent calls in `main()`, after `line` is returned, `line` will need to be freed for the next retrieval
-		//Repeat, until all lines have been read from the `fd` or `fds`
+		//Repeat, until all lines have been read from the `fd` or `fd`s
 	```
