@@ -3,11 +3,11 @@
 char *get_next_line_bonus(int fd) //Define a function that takes in integer (a file descriptor), and returns a pointer to a character array (the line retrieved) of the current `fd`
 {
   static char *stash[MAX_FD]; //Declare an array of static character pointers with `MAX_FD` elements, to hold the remainder of a line corresponding to its `fd`, after a newline character is found. See 4.
-  char *line; //Declare a character pointer to hold the current line being read
+  char *line_read; //Declare a character pointer to hold the current line being read
   
-  if (fd < 0 || fd >= MAX_FD || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0 || (!(line = malloc(sizeof(char) * (BUFFER_SIZE + 1))))) //Check for errors. The extra check here is `fd >= MAX_FD`
+  if (fd < 0 || fd >= MAX_FD || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0 || (!(line_read = malloc(sizeof(char) * (BUFFER_SIZE + 1))))) //Check for errors. The extra check here is `fd >= MAX_FD`
     return (NULL); //If any errors, return `NULL`
-  return (ft_line_read(fd, line, &stash[fd])); //Returns the result of `ft_line_read()`. It reads a line from `fd` into `line`, stops when it encounters a `\n`, and stores any remaining text in `stash` for the current `fd`, before returning `line`
+  return (ft_line_read(fd, line_read, &stash[fd])); //Returns the result of `ft_line_read()` which is the `line` up to the `\n` for the current `fd`
 }
 
 /*

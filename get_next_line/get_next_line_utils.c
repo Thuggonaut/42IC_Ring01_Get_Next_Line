@@ -51,7 +51,7 @@ char *ft_strjoin(char *s1, char *s2) //Define a function that takes pointers to 
 char	*ft_get_line(char **stash) //Define a function that takes a pointer to a string array (a pointer to a pointer to a character), and returns an extracted `line` 
 {
 	char		*line; //Declare a pointer variable that will store a pointer to the extracted `line` from the `stash` string
-	char		*tmp_buff; //Declare a temporary pointer variable that will store the old `stash`, while the new `stash` needs updating
+	char		*tmp_stash; //Declare a temporary pointer variable that will store the old `stash`, while the new `stash` needs updating
 	int			len; //Declare an integer variable to keep track of the length of `line`
 
 	line = NULL;
@@ -61,10 +61,10 @@ char	*ft_get_line(char **stash) //Define a function that takes a pointer to a st
 	if ((*stash)[len] == '\n') //Check if a `\n` has been encountered at the end of `stash`, if so, perform the below operations
 	{
 		line = ft_substr(*stash, 0, len); //Assign to `line`, a new string created by `ft_substr()` that contains the characters from the start of `stash` (0-th index) up to, but not including, the `\n`
-		tmp_buff = *stash; //Assign to `tmp_buff` the characters from `stash` before `stash` is updated next
+		tmp_stash = *stash; //Assign to `tmp_stash` the characters from `stash` before `stash` is updated next
 		*stash = ft_substr(*stash, len + 1, ft_strlen(*stash) - (len + 1)); //`stash` is updated to be a new string that starts from the character after the `\n` in the old stash, until the end of the old stash
-		free(tmp_buff); //Free the old `stash` now stored in `tmp_buff`. See #3
-		tmp_buff = NULL; //Set to `NULL` to avoid dangling pointers. See #3
+		free(tmp_stash); //Free the old `stash` now stored in `tmp_stash`. See #3
+		tmp_stash = NULL; //Set to `NULL` to avoid dangling pointers. See #3
 	}
 	else if ((*stash)[len] == '\0') //Check if a `\0` has been encountered at the end of `stash`, if so, perform the below operations
 	{
@@ -77,15 +77,15 @@ char	*ft_get_line(char **stash) //Define a function that takes a pointer to a st
 char	*ft_line_read(int fd, char *line_read, char **stash) //Define a function that takes a file descriptor, a pointer to a string, a pointer to a string array, and returns the extracted line from `stash`
 {
 	int			read_bytes; //Declare an integer variable that will store the number of bytes read from the file descriptor
-	char		*tmp_buff; //Declare a pointer variable that will store the old `stash`, while the new `stash` needs updating
+	char		*tmp_stash; //Declare a pointer variable that will store the old `stash`, while the new `stash` needs updating
 
 	while ((read_bytes = read(fd, line_read, BUFFER_SIZE))) //Loop and assign to `read_bytes`, the number of bytes succeffully read. If bytes read is `-1`, an error has occurred or there is no more data to read from `fd`, this condition will be `false`. See #5
 	{
 		line_read[read_bytes] = '\0'; //Ensure `line_read` is properly null terminated as `read()` does not add a `\0` at the end of the data it reads
-		tmp_buff = *stash; //Assign to `tmp_buff` the characters from `stash` before `stash` is updated next
-		*stash = ft_strjoin(tmp_buff, line_read); //`stash` is updated to be a new string created by `ft_strjoin()`, that is the concatenation of the old `stash` and `line_read`
-		free(tmp_buff); //Free the old `stash` now stored in `tmp_buff`. See #3
-		tmp_buff = NULL; //Set to `NULL` to avoid dangling pointers. See #3
+		tmp_stash = *stash; //Assign to `tmp_stash` the characters from `stash` before `stash` is updated next
+		*stash = ft_strjoin(tmp_stash, line_read); //`stash` is updated to be a new string created by `ft_strjoin()`, that is the concatenation of the old `stash` and `line_read`
+		free(tmp_stash); //Free the old `stash` now stored in `tmp_stash`. See #3
+		tmp_stash = NULL; //Set to `NULL` to avoid dangling pointers. See #3
 	}
 	free(line_read); //`line_read` is a buffer, used to temporarily hold data read from a file descriptor. After this data has been appended to `stash`, it is no longer needed in `line_read`
 	line_read = NULL; //Set to `NULL` because there are no characters left in `line_read` to process. See #4

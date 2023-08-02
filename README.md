@@ -397,7 +397,7 @@ Now that we understand how `get_next_line()` should function, we will need to ha
 7. 🔹 Let's write some pseudo code to see how this might all come together:
 	```
 	//Call `get_next_line()` with a file descriptor
-		//Allocate memory for the `line` where it will be stored, after `line` is retrieved from the `fd`
+		//Allocate memory for the `line_read` where it will be stored, after `line_read` is retrieved from the `fd`
 		//Check for file descriptor, reading, and memory allocation errors
 	
 	//Read `BUFFER_SIZE` bytes from `fd` and return the number of bytes successfully read

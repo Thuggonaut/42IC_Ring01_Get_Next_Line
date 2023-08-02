@@ -3,11 +3,11 @@
 char *get_next_line(int fd) //Define a function that takes in integer (a file descriptor), and returns a pointer to a character array (the line retrieved) of the current `fd`
 {
   static char *stash; //Declare a static character pointer to hold the remainder of a line after a newline character is found
-  char *line; //Declare a character pointer to hold the current line being read
+  char *line_read; //Declare a character pointer to hold the current line being read
   
-  if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0 || (!(line = malloc(sizeof(char) * (BUFFER_SIZE + 1))))) //Check for errors. See #1
+  if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0 || (!(line_read = malloc(sizeof(char) * (BUFFER_SIZE + 1))))) //Check for errors. See #1
     return (NULL); //If any errors, return `NULL`
-  return (ft_line_read(fd, line, &stash)); //Returns the result of `ft_line_read()`. It reads a line from `fd` into `line`, stops when it encounters a `\n`, and stores any remaining text in `stash`, before returning `line`. See #2
+  return (ft_line_read(fd, line_read, &stash)); //Returns the result of `ft_line_read()` which is the `line` up to the `\n`. See #2
 }
 
 /*

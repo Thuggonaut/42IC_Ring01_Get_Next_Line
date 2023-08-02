@@ -51,7 +51,7 @@ char *ft_strjoin(char *s1, char *s2)
 char	*ft_get_line(char **stash)   
 {
 	char		*line;  
-	char		*tmp_buff; 
+	char		*tmp_stash; 
 	int			len;  
 
 	line = NULL;
@@ -61,10 +61,10 @@ char	*ft_get_line(char **stash)
 	if ((*stash)[len] == '\n')  
 	{
 		line = ft_substr(*stash, 0, len);  
-		tmp_buff = *stash;  
+		tmp_stash = *stash;  
 		*stash = ft_substr(*stash, len + 1, ft_strlen(*stash) - (len + 1));  
-		free(tmp_buff);  
-		tmp_buff = NULL; 
+		free(tmp_stash);  
+		tmp_stash = NULL; 
 	}
 	else if ((*stash)[len] == '\0')  
 	{
@@ -77,15 +77,15 @@ char	*ft_get_line(char **stash)
 char	*ft_line_read(int fd, char *line_read, char **stash)  
 {
 	int			read_bytes; 
-	char		*tmp_buff; 
+	char		*tmp_stash; 
 
 	while ((read_bytes = read(fd, line_read, BUFFER_SIZE)))
 	{
 		line_read[read_bytes] = '\0'; 
-		tmp_buff = *stash; 
-		*stash = ft_strjoin(tmp_buff, line_read); 
-		free(tmp_buff);
-		tmp_buff = NULL;
+		tmp_stash = *stash; 
+		*stash = ft_strjoin(tmp_stash, line_read); 
+		free(tmp_stash);
+		tmp_stash = NULL;
 	}
 	free(line_read); 
 	line_read = NULL; 
