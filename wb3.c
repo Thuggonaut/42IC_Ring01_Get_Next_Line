@@ -4,11 +4,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_FD 1024  
-
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 5 
-# endif
+#ifndef BUFFER_SIZE
+#define BUFFER_SIZE 5
+#endif
 
 char *ft_strjoin(char *s1, char *s2)  
 {
@@ -48,60 +46,69 @@ char *ft_substr(char const *s, unsigned int start, size_t len)
     return (substr);  
 }
 
-char    *get_next_line(int fd)
+char *process_line(char **stash) 
 {
-    static char *stash[MAX_FD];
-    char        *line_read;
-    char        *leftovers;
-    char        *line;
-    int         read_bytes;
-    int         len;
-
-    if (fd < 0 || fd >= MAX_FD || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0 ) 
-        return (NULL);
-    
-     if (!stash[fd])
-        stash[fd] = strdup("");
-
-    line_read = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-    if (!line_read)
-        return (NULL);
-
-    read_bytes = read(fd, line_read, BUFFER_SIZE);
-    line_read[read_bytes] = '\0';
-    stash[fd] = ft_strjoin(stash[fd], line_read);
-   
+    int len;
     len = 0;
-    while (stash[fd][len] != '\n' && stash[fd][len] != '\0')
+    while ((*stash)[len] != '\n' && (*stash)[len] != '\0')
         len++;
-
-    if (stash[fd][len] == '\n')
+    if ((*stash)[len] == '\n') 
     {
-        line = ft_substr(stash[fd], 0, len);
-        leftovers = ft_substr(stash[fd], len + 1, strlen(stash[fd]) - (len + 1));
-        free(stash[fd]);
-        stash[fd] = leftovers;
-        free(line_read);
+        char *line = ft_substr(*stash, 0, len);
+        char *leftovers = ft_substr(*stash, len + 1, strlen(*stash) - (len + 1));
+        free(*stash);
+        *stash = leftovers;
         return (line);
     }
-    if (read_bytes == 0) 
+    return (NULL);
+}
+
+char *read_from_fd(int fd) 
+{
+    char *line_read;
+    int read_bytes;
+    line_read = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+    if (!line_read) 
+        return (NULL);
+    read_bytes = read(fd, line_read, BUFFER_SIZE);
+    if (read_bytes <= 0) 
     {
-        if (*stash[fd]) 
-        {
-            line = strdup(stash[fd]);
-            free(stash[fd]);
-            stash[fd] = NULL;
-            free(line_read);
-            return (line);
-        }
-        free(stash[fd]);
-        stash[fd] = NULL;
         free(line_read);
         return (NULL);
     }
+    line_read[read_bytes] = '\0';
+    return (line_read);
+}
+
+char *get_next_line(int fd)
+{
+    static char *stash;
+    char *line_read;
+    char *line;
+
+    if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0)
+        return (NULL);
+    if (!stash)
+        stash = strdup("");
+    line = process_line(&stash);
+    if (line)
+        return (line);
+    line_read = read_from_fd(fd);
+    if (!line_read) 
+    {
+        line = strdup(stash);
+        free(stash);
+        stash = NULL;
+        if (*line) 
+            return (line);
+        free(line);
+        return (NULL);
+    }
+    stash = ft_strjoin(stash, line_read);
     free(line_read);
     return (get_next_line(fd));
 }
+
 
 int main(void)
 {

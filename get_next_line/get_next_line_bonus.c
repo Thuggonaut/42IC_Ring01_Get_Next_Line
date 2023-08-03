@@ -1,5 +1,34 @@
 #include "get_next_line_bonus.h"
 
+char *get_next_line(int fd)
+{
+    static char *stash;
+    char *line_read;
+    char *line;
+
+    if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0)
+        return (NULL);
+    if (!stash)
+        stash = ft_strdup("");
+    line = process_line(&stash);
+    if (line)
+        return (line);
+    line_read = read_from_fd(fd);
+    if (!line_read) 
+    {
+        line = ft_strdup(stash);
+        free(stash);
+        stash = NULL;
+        if (*line) 
+            return (line);
+        free(line);
+        return (NULL);
+    }
+    stash = ft_strjoin(stash, line_read);
+    free(line_read);
+    return (get_next_line(fd));
+}
+
 char *get_next_line_bonus(int fd) //Define a function that takes in integer (a file descriptor), and returns a pointer to a character array (the line retrieved) of the current `fd`
 {
   static char *stash[MAX_FD]; //Declare an array of static character pointers with `MAX_FD` elements, to hold the remainder of a line corresponding to its `fd`, after a newline character is found. See 4.

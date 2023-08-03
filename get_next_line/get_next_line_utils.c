@@ -10,6 +10,44 @@ size_t ft_strlen(const char *s) //Define a function that takes a pointer to a st
     return (s - start - 1); //`s` is now pointing to the end of `s`. The resulting length of `s` is calulated by subtracting the final position of `start` of the string (index `0`) from the position of `s`. The `-1` is to account for the extra increment for the `\0`
 }
 
+void *ft_memset(void *ptr, int value, size_t num) //Define a function that takes a pointer to the memory block to be filled, an integer value to set each byte, and a size_t number of bytes to be set to the given value
+{
+    unsigned char *p; //`unsigned char` is declared to ensure that we can access individual bytes of memory, as `unsigned char` allows us to set values in the range of 0 to 255
+
+    p = (unsigned char *)ptr; //Assign the value of the `ptr` parameter
+    while (num > 0) //Loop until `num` becomes `0`, at which point the function has set the specified number of bytes in memory to the given value
+    {
+        *p = (unsigned char)value; //Set the byte to the input value
+        p++; //Move to the next byte in memory for processing
+        num--; //Decremented to track the number of bytes remaining to be set
+    }
+    return (ptr); //Return the original pointer, which now points to the memory block with its content modified
+}
+
+void	*ft_calloc(size_t n, size_t size) //Define a function that takes a `size_t` number of elements to allocate memory for, the size for each element (see #1), and returns a generic pointer to the memory block
+{
+	void	*ptr; //Declare a generic pointer variable that will store a pointer to the memory block later allocated by `malloc()`
+
+	ptr = malloc(n * size); //Assign to `ptr` a memory block 
+	if (ptr != NULL) //If memory allocation is successfull, perform the following operations
+		ft_memset(ptr, 0, n * size); //Initialise the allocated memory block to `0` in all elements. 
+	return ((void *)ptr); //A pointer to the allocated memory block is returned. If allocation was unsuccessfull, `ptr` will be a `NULL` pointer
+}
+
+void	*ft_memcpy(void *dest, const void *src, size_t n) //Define a function that takes a pointer to the destination to be copied be copied, a pointer to the source from which to copy (`const` because we don't want to modify source), and the number of bytes to be copied
+{
+	unsigned char	*d; //Declare pointers used to traverse the destination and source memory blocks
+	unsigned char	*s; //`unsigned char*` allows us to work with individual bytes rather than entire data types, which makes it easier to manipulate memory
+
+	d = (unsigned char *)dest;
+	s = (unsigned char *)src;
+	if (!dest && !src) //Checks for valid pointers
+		return (NULL); //If either is `NULL`, it means there is no valid memory location to copy data from or to, so the function returns `NULL`
+	while (n--) //Loop `n` times
+		*d++ = *s++; //Copy one byte at a time from the `src` to the `dest` memory locations. Post increment each iteration to move to the next chracters for copying
+	return (dest); //Return the original `dest` pointer which will have the contents of `src`
+}
+
 char *ft_substr(char const *s, unsigned int start, size_t len) //Define a function that takes a pointer to a string, an integer representing the starting index from where to copy, the length of characters to copy, and returns a pointer to the extracted string
 {
     char    *substr; //Declare a char pointer variable that will store a pointer to the extracted portion of a string
@@ -25,6 +63,19 @@ char *ft_substr(char const *s, unsigned int start, size_t len) //Define a functi
     }
     *(substr + i) = '\0'; //Ensure the new string is properly null terminated
     return (substr); //Return a pointer to the begining of the new string
+}
+
+char	*ft_strdup(const char *str) //Define a function that takes a pointer to a string to duplicate
+{
+	size_t	len; //Declare a size_t variabl to store the length of the input string str, including the null terminator
+	char	*dst;
+
+	len = ft_strlen(str) + 1; //Assign the length of `str` plus one to accommodate the null terminator in the duplicated string
+	dst = ft_calloc(len, sizeof(char)); //Allocate memory for the duplicated string 
+	if (dst == NULL) //Checks for memory allocation fail
+		return (NULL); //Return `NULL` if so
+	ft_memcpy(dst, str, len); //Copy into `dst`, the contents of `str`
+	return (dst); //Return a pointer to the new dynamically allocated string that is an exact duplicate of the `str`
 }
 
 char *ft_strjoin(char *s1, char *s2) //Define a function that takes pointers to two strings, concatenate the strings, and return a pointer to a newly created and allocated string that consists of the joined two strings
@@ -48,49 +99,44 @@ char *ft_strjoin(char *s1, char *s2) //Define a function that takes pointers to 
     return (str); //Return the pointer which remains pointed at the beginning of the newly created string
 }
 
-char	*ft_get_line(char **stash) //Define a function that takes a pointer to a string array (a pointer to a pointer to a character), and returns an extracted `line` 
+char *process_line(char **stash) //Define a function that takes a pointer to a string array (a pointer to a pointer to a character), and returns the extracted `line` that is up to the `\n`
 {
-	char		*line; //Declare a pointer variable that will store a pointer to the extracted `line` from the `stash` string
-	char		*tmp_stash; //Declare a temporary pointer variable that will store the old `stash`, while the new `stash` needs updating
-	int			len; //Declare an integer variable to keep track of the length of `line`
+    int len; //Declare an integer variable to keep track of the length of `line` needed for extraction
+    char *line; //Declare a pointer to a string, where the extrtacted `line` will be stored
+    char *leftovers;
 
-	line = NULL;
-	len = 0; //Iniatialised to `0` because no extraction has taken place yet
-	while ((*stash)[len] != '\n' && (*stash)[len] != '\0') //Increment `len` until a `\n` is found, or the end of `stash` has been reached, to traverse through `stash`
-		len++; //By the end of the loop, `len` will hold the length of the line in `stash` up to the `\n` or the end of the string
-	if ((*stash)[len] == '\n') //Check if a `\n` has been encountered at the end of `stash`, if so, perform the below operations
-	{
-		line = ft_substr(*stash, 0, len); //Assign to `line`, a new string created by `ft_substr()` that contains the characters from the start of `stash` (0-th index) up to, but not including, the `\n`
-		tmp_stash = *stash; //Assign to `tmp_stash` the characters from `stash` before `stash` is updated next
-		*stash = ft_substr(*stash, len + 1, ft_strlen(*stash) - (len + 1)); //`stash` is updated to be a new string that starts from the character after the `\n` in the old stash, until the end of the old stash
-		free(tmp_stash); //Free the old `stash` now stored in `tmp_stash`. See #3
-		tmp_stash = NULL; //Set to `NULL` to avoid dangling pointers. See #3
-	}
-	else if ((*stash)[len] == '\0') //Check if a `\0` has been encountered at the end of `stash`, if so, perform the below operations
-	{
-		line = *stash; //Assign to `line` the pointer to the new `stash` which contains all the remaining characters in `stash`
-		*stash = NULL; //Set to `NULL` because there are no characters left in `stash` to process. See #4
-	}
-	return (line); //Return the line that was extracted from `stash`
+    len = 0; //Iniatialised to `0` because no extraction has taken place yet
+    while ((*stash)[len] != '\n' && (*stash)[len] != '\0') //Increment `len` until a `\n` is found, or the end of `stash` has been reached, to traverse through `stash`
+        len++; //By the end of the loop, `len` will hold the length of the line in `stash` up to the `\n` or the end of the string
+    if ((*stash)[len] == '\n') //Check if a `\n` has been encountered at the end of `stash`, if so, perform the below operations
+    {
+        line = ft_substr(*stash, 0, len); //Extract the `line` that is up to the `\n`
+        leftovers = ft_substr(*stash, len + 1, ft_strlen(*stash) - (len + 1)); //Extract the remaining chracters from `stash` after the `\n`
+        free(*stash); //Now that we've extracted the `line` and `leftovers` portions from `stash` we no longer need this data. This "old stash" needs to be cleaned up for a "new stash"
+        *stash = leftovers; //Update the "new stash" to contain only the remaining chracters from `stash`. This will be used by `get_next_line` to append the next line read
+        return (line); //Return the line extracted up to the `\n`
+    }
+    return (NULL); //If a `\n` is not found, a complete line is not present in the stash. `NULL` to indicates that a complete line isn't available yet
 }
 
-char	*ft_line_read(int fd, char *line_read, char **stash) //Define a function that takes a file descriptor, a pointer to a string, a pointer to a string array, and returns the extracted line from `stash`
+char *read_from_fd(int fd) //Define a function that takes a file descriptor, and returns a pointer to a character array (the line retrieved) of the current `fd`
 {
-	int			read_bytes; //Declare an integer variable that will store the number of bytes read from the file descriptor
-	char		*tmp_stash; //Declare a pointer variable that will store the old `stash`, while the new `stash` needs updating
+    char *line_read; //Declare a pointer to a string, where the retrieved line read from the current `fd` will be stored
+    int read_bytes; //Declare an integer variable that will store the number of bytes read from the file descriptor
 
-	while ((read_bytes = read(fd, line_read, BUFFER_SIZE))) //Loop and assign to `read_bytes`, the number of bytes succeffully read. If bytes read is `-1`, an error has occurred or there is no more data to read from `fd`, this condition will be `false`. See #5
-	{
-		line_read[read_bytes] = '\0'; //Ensure `line_read` is properly null terminated as `read()` does not add a `\0` at the end of the data it reads
-		tmp_stash = *stash; //Assign to `tmp_stash` the characters from `stash` before `stash` is updated next
-		*stash = ft_strjoin(tmp_stash, line_read); //`stash` is updated to be a new string created by `ft_strjoin()`, that is the concatenation of the old `stash` and `line_read`
-		free(tmp_stash); //Free the old `stash` now stored in `tmp_stash`. See #3
-		tmp_stash = NULL; //Set to `NULL` to avoid dangling pointers. See #3
-	}
-	free(line_read); //`line_read` is a buffer, used to temporarily hold data read from a file descriptor. After this data has been appended to `stash`, it is no longer needed in `line_read`
-	line_read = NULL; //Set to `NULL` because there are no characters left in `line_read` to process. See #4
-	return (ft_get_line(stash)); //`ft_get_line()` is called on `stash` to extract the next line from `stash`
+    line_read = malloc(sizeof(char) * (BUFFER_SIZE + 1)); //Allocated memory for the storage of the line retrieved
+    if (!line_read) //Checks for successful allocation
+        return (NULL); //Return NULL if not
+    read_bytes = read(fd, line_read, BUFFER_SIZE); //Assign to `read_bytes`, the number of bytes succeffully read
+    if (read_bytes <= 0) //If bytes read is `-1`, an error has occurred or `0` if there is no more data to read from `fd`. See #3
+    {
+        free(line_read); //Free this memory block for a new allocation
+        return (NULL); //Return NULL due to error or no more data to read
+    }
+    line_read[read_bytes] = '\0'; //Ensure `line_read` is properly null terminated as `read()` does not add a `\0` at the end of the data it reads
+    return (line_read); //Return the line of size `BUFFER_SIZE` retrieved from the current `fd`
 }
+
 
 /*
 #1  Using a pointer `p` to traverse, rather than directly using `str` to traverse:
@@ -127,38 +173,7 @@ char	*ft_line_read(int fd, char *line_read, char **stash) //Define a function th
         - `*(s + start + i)` gives the `i-th` character from the `start` position in `s`.
 
 
-#3  The `tmp_buff` is used to hold the original `stash` string while a new `stash` string is being created.
-        - A new block of memory is allocated for the new `stash` string by `ft_substr()`, and the stash pointer is updated to point to
-          this new block of memory. 
-        - However, the original `stash` string is still occupying a block of memory, and this block of memory is no longer accessible 
-          because no pointers are pointing to it. This is what's known as a memory leak.
-        - To prevent this memory leak, the `tmp_buff` pointer is used to keep a reference to the original `stash` string before the 
-          `stash` pointer is updated. 
-        - Then, once the new `stash` string has been created, the original `stash` string can be safely freed using the `tmp_buff` 
-          pointer.
-        - By freeing the `tmp_buff`, you're freeing the memory that was originally allocated for the `stash` string, preventing a memory
-          leak. 
-        - Setting `tmp_buff` to `NULL` afterwards is a good practice to avoid dangling pointers.
-                - A dangling pointer is a pointer that doesn't point to a valid object. 
-                - If you have a pointer pointing to a memory location and that memory location is deallocated (for example, by using 
-                  `free()` in C), the pointer is now dangling. 
-                - It's pointing to a memory location that has been freed and can be reused for other purposes.
-                - Setting pointers to `NULL` after freeing the memory they point to, avoids returning pointers to local variables.
-
-
-#4  Setting `*stash` to `NULL` serves two purposes:
-    
-    1. Avoid dangling pointers: `
-        - After `line` has taken the remaining characters of `stash`, the memory previously pointed to by `stash is now owned by `line`. 
-        - To avoid having `stash` become a dangling pointer (a pointer that points to memory it doesn't own), it's set to `NUL`L.
-
-    2. Indicate the end of data: 
-        - Setting `stash` to `NULL` also serves as an indicator that all data has been processed and there's nothing left in `stash`. 
-        - If a subsequent call to `ft_get_line()` is made, it can check if `stash` is `NULL` and, if so, know immediately that there's
-          no more data to process.
-
-
-#5  `read_bytes = read(fd, line, BUFFER_SIZE)`: 
+#3  `read_bytes = read(fd, line, BUFFER_SIZE)`: 
     - This is a call to the `read` function, which reads up to `BUFFER_SIZE` bytes of data from the file descriptor `fd` into the buffer 
       pointed to by `line`. 
     - The `read` function returns the number of bytes actually read, or `-1` if an error occurred or there's no data to read. 

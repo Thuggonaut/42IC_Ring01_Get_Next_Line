@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_FD 1024  
-
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 5 
 # endif
@@ -50,18 +48,18 @@ char *ft_substr(char const *s, unsigned int start, size_t len)
 
 char    *get_next_line(int fd)
 {
-    static char *stash[MAX_FD];
+    static char *stash;
     char        *line_read;
     char        *leftovers;
     char        *line;
     int         read_bytes;
     int         len;
 
-    if (fd < 0 || fd >= MAX_FD || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0 ) 
+    if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0 ) 
         return (NULL);
     
-     if (!stash[fd])
-        stash[fd] = strdup("");
+     if (!stash)
+        stash = strdup("");
 
     line_read = malloc(sizeof(char) * (BUFFER_SIZE + 1));
     if (!line_read)
@@ -69,33 +67,33 @@ char    *get_next_line(int fd)
 
     read_bytes = read(fd, line_read, BUFFER_SIZE);
     line_read[read_bytes] = '\0';
-    stash[fd] = ft_strjoin(stash[fd], line_read);
+    stash = ft_strjoin(stash, line_read);
    
     len = 0;
-    while (stash[fd][len] != '\n' && stash[fd][len] != '\0')
+    while (stash[len] != '\n' && stash[len] != '\0')
         len++;
 
-    if (stash[fd][len] == '\n')
+    if (stash[len] == '\n')
     {
-        line = ft_substr(stash[fd], 0, len);
-        leftovers = ft_substr(stash[fd], len + 1, strlen(stash[fd]) - (len + 1));
-        free(stash[fd]);
-        stash[fd] = leftovers;
+        line = ft_substr(stash, 0, len);
+        leftovers = ft_substr(stash, len + 1, strlen(stash) - (len + 1));
+        free(stash);
+        stash = leftovers;
         free(line_read);
         return (line);
     }
     if (read_bytes == 0) 
     {
-        if (*stash[fd]) 
+        if (*stash) 
         {
-            line = strdup(stash[fd]);
-            free(stash[fd]);
-            stash[fd] = NULL;
+            line = strdup(stash);
+            free(stash);
+            stash = NULL;
             free(line_read);
             return (line);
         }
-        free(stash[fd]);
-        stash[fd] = NULL;
+        free(stash);
+        stash = NULL;
         free(line_read);
         return (NULL);
     }
