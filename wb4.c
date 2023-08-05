@@ -126,13 +126,11 @@ int main(void)
     while ((line = get_next_line_bonus(fd1)) != NULL)
     {
         printf("%s\n", line);
-        free(line);
     }
     printf("Reading from test2.txt:\n");
     while ((line = get_next_line_bonus(fd2)) != NULL)
     {
         printf("%s\n", line);
-        free(line);
     }
     close(fd1);
     close(fd2);

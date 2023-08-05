@@ -119,7 +119,7 @@ char *process_line(char **stash) //Define a function that takes a pointer to a s
     return (NULL); //If a `\n` is not found, a complete line is not present in the stash. `NULL` to indicates that a complete line isn't available yet
 }
 
-char *read_from_fd(int fd) //Define a function that takes a file descriptor, and returns a pointer to a character array (the line retrieved) of the current `fd`
+char *read_from_fd(int fd) //Define a function that takes a file descriptor, and return a pointer to a character array (the line retrieved) of the current `fd`
 {
     char *line_read; //Declare a pointer to a string, where the retrieved line read from the current `fd` will be stored
     int read_bytes; //Declare an integer variable that will store the number of bytes read from the file descriptor
@@ -127,7 +127,7 @@ char *read_from_fd(int fd) //Define a function that takes a file descriptor, and
     line_read = malloc(sizeof(char) * (BUFFER_SIZE + 1)); //Allocated memory for the storage of the line retrieved
     if (!line_read) //Checks for successful allocation
         return (NULL); //Return NULL if not
-    read_bytes = read(fd, line_read, BUFFER_SIZE); //Assign to `read_bytes`, the number of bytes succeffully read
+    read_bytes = read(fd, line_read, BUFFER_SIZE); //Assign to `read_bytes`, the number of bytes succeffully read. Recall, each time `read()` reads, it'll increment a file pointer to the character last read. Subsequent calls to `read()` picks up where it last left off
     if (read_bytes <= 0) //If bytes read is `-1`, an error has occurred or `0` if there is no more data to read from `fd`. See #3
     {
         free(line_read); //Free this memory block for a new allocation

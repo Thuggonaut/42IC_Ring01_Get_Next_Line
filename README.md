@@ -24,6 +24,7 @@ This project helps us understand more about:
 	- Step 5: [Learn the `-D BUFFER_SIZE` flag](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-5-learn-the--d-buffer_size-flag)
 	- Step 6: [Understand get_next_line](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-6-understand-get_next_line)
 	- Step 7: [Code get_next_line](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-7-code-get_next_line)
+	- Step 8: Test our get_next_line
 
 
 ## 🔵 The Mandatory part:
@@ -244,15 +245,15 @@ get_next_line/
 		- We send it a pointer of type `void` which is a buffer.
 		- We send it a second `size_t` which is a number of bytes. 
 		- Then, `read()` will read from a file, then store what it read in a variable. 
-		- On objects capable of seeking, the `read()` starts at a position given by the pointer associated with `fd`.
-		- Upon return from `read()`, the pointer is incremented by the number of bytes actually read. 
-		- So, when you call it for the first time on a file, the pointer will be positioned right before the first character of that file. 
-		- Then, you tell it to “read n bytes”, and say, `n = 5`, it’ll read 5 bytes of characters, while advancing the pointer five bytes forward. 
+		- On objects capable of seeking, the `read()` starts at a position given by the file pointer associated with `fd`.
+		- Upon return from `read()`, the file pointer is incremented by the number of bytes actually read. 
+		- So, when you call it for the first time on a file, the file pointer will be positioned right before the first character of that file. 
+		- Then, you tell it to “read n bytes”, and say, `n = 5`, it’ll read 5 bytes of characters, while advancing the file pointer five bytes forward. 
 		- Then, you tell it to “store the 5 characters read in the buffer I’ve sent you”, and it’ll store them in the buffer. 
 		- Finally, it returns the number of bytes it successfully read. 
-		- Calling `read()` again on the same file that was just read, it’ll remember the position of the pointer which will be where it last read from, as it’s associated with the file descriptor. 
-			- So, the pointer stays where it last was, at the end of the first call, and upon calling it again it’ll know what it’s already read. 
-			- We tell it to read 5 bytes again, and it’ll read 5 bytes then increment the pointer 5 bytes forward again. Then it’ll store 5 bytes of characters read in the buffer, and return `5` to indicate it’s successfully read 5 bytes. 
+		- Calling `read()` again on the same file that was just read, it’ll remember the position of the file pointer which will be where it last read from, as it’s associated with the file descriptor. 
+			- So, the file pointer stays where it last was, at the end of the first call, and upon calling it again it’ll know what it’s already read. 
+			- We tell it to read 5 bytes again, and it’ll read 5 bytes then increment the file pointer 5 bytes forward again. Then it’ll store 5 bytes of characters read in the buffer, and return `5` to indicate it’s successfully read 5 bytes. 
 		- Calling `read()` in a loop on the same file will always overwrite the buffer with the new characters read, as it uses the same memory. 
 		- What happens when we call `read()` again but there are less bytes than `n` to read before the end of a file?
 			- It’ll read the remaining bytes, then stores the read characters in the buffer, then returns the number of bytes it’s read, and when it’s finished reading the file, it returns `0`. 
@@ -306,6 +307,17 @@ get_next_line/
 		```
 
     - Recall, `fd` is a file descriptor pointing to the file to be read. `buf` is a buffer where the read content will be stored, and `cnt` is the number of bytes to read from the file.
+	- You can change the buffer size at compilation. When you compile the C source code, the -D option will set a preprocessor macro. 
+    - Compile your code like this, e.g. with buffer size of 42:
+
+        `cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 get_next_line.c get_next_line_utils.c`
+
+    - Then, the `BUFFER_SIZE` macro is given the value '42', and it can be used in your program. 
+            - A `BUFFER_SIZE` of `1` means that you're reading in a file `1` byte at a time, which is very inefficient but can be useful for 
+              testing your program. 
+            - A `BUFFER_SIZE` of `10000000` means you're reading in the file `10000000` bytes at a time, which might be faster but 
+              will use a lot more memory.
+
 	- When we compile our program with `-D BUFFER_SIZE=42`, this would mean that `read()` will read in chunks of `42` bytes at a time from the file, until it reaches the end of the file. 
 
 3. 🔹 **Defining the default in the `get_next_line.h` file**
@@ -347,73 +359,80 @@ get_next_line/
 		- Our variable `line` will store the extracted characters we want, including the line break `\n`, or the `\0` signalling the end of the file. 
 	- Now that `get_next_line()` has returned us our first line of the file, we will need to clean up our `stash`, as what it had previously stored was already returned, and we no longer need `stash` to store it. 
 
-7. 🔹 Recall, when `read()` is called subsequently, the pointer to the buffer remains where it last completed its `n` bytes read, because it is associated with the file descriptor of that file.
-	- This means, after our first line that was read and returned, even though we’d already cleaned up our `stash`, when we come back and call `get_next_line()` again, the `stash` variable is re-initialized, back to where the pointer was last left off. 
-		- This is because `stash` is a `static variable`. Recall, a static variable is a variable that will keep its value between function calls. 
-		- In this case, it will have stored everything that had been previously read. 
+7. 🔹 Recall, when `read()` is called subsequently, the file pointer to the buffer remains where it last completed its `n` bytes read, because it is associated with the file descriptor of that file.
+	- This means, after our first line that was read and returned, even though we’d already cleaned up our `stash`, when we come back and call `get_next_line()` again, the `stash` variable is re-initialized, back to where the file pointer was last left off. 
 
 
 ## 🔵 Step 7: Code get_next_line
 Now that we understand how `get_next_line()` should function, we will need to have the following considerations:
 
 1. 🔹 We need a helper function that first reads `BUFFER_SIZE` bytes from the `fd` and store it in a buffer `line_read`.
-	- We will call it `ft_line_read()`.
-	- Make it append the `line_read` to our `stash`.
-	- Make it return a `line` extracted from our `stash` that contains characters up to a `\n`. 
-		- Note: If calling `read()` the first time, or subsequent times and no `\n` was found, the contents of `stash` will remain unchanged.
-		- In other words, `line = *stash` because `stash` is not split by the `\n`.
+	- We will call it `read_from_fd()`.
+	- Make it return the line that's read.
+	
 
-2. 🔹 For `ft_line_read()` to append a new `line_read` to our `stash`, we will need a helper function to do this. 
-	- Recall, from our libft library, `ft_strjoin()` creates a new string by allocating memory enough to hold two strings, and concatenates them.
-
-3. 🔹 `malloc()` needs to know exactly how many bytes is needed for memory allocation. 
-	- So, we need to calculate the length of the strings. 
-	- Recall, from our libft library, `ft_strlen()` calculates the length of a string, not including the `\0`.
-
-4. 🔹 Referring back to point 1., our `ft_line_read()` needs to return a `line` extracted from our `stash` that contains characters from the begining of `stash`, up to a `\n`. 
-	- We will need a helper function to do this. We will call it `ft_get_line()`, and make it return said `line`.
-	- We need it to search for the `\n` in `stash`.
-		- We also need to account for, if the end of `stash` is a `\0`, which could signal no `\n` was found, or the end of the file is reached. 
-		- In which case, the contents of `stash` will remain unchanged.
-	- Then, extract the `line` from `stash` that is up to the `\n`.
-	- After `line` is extracted, `stash` then needs to be updated, to begin after the previously read `\n`, up to the end of `stash`. 
-
-5. 🔹 In order for `ft_get_line()` to: 1. extract one portion of `stash`; and 2. update `stash` to contain the "leftover" characters from the other portion, thereby "splitting" `stash` at the `\n`, new memory needs to be allocated. 
+2. 🔹 We need a helper function to look inside `stash`, and search for either the `\n` or the `\0` (signalling the end of `stash`).
+	- We will call it `process_line()`.
+	- Make it return the extracted `line` up to the `\n`.
+	- In order for `process_line()` to: 
+		- 1. extract one portion of `stash`, and 
+		- 2. update `stash` to contain the "leftover" characters from the other portion, thereby "splitting" `stash` at the `\n`, new memory needs to be allocated. 
 	- Recall, from our libft library, `ft_substr()` allocates memory, and copies into a new string, the characters from a starting index of the input string, to an ending index. 
-	- We can use pointer arithmetic to calculate the positions of the start and end indices for the portions of `stash` we need copied.
+	- We can use pointer arithmetic to calculate the positions of the start and end indices for the portions of `stash` we need copied. 
 
-6. 🔹 Finally, our main function `get_next_line()`:
-	- Will simply call `ft_line_read()`, which will 
-	- Call `ft_get_line()`, which will 
-	- Return us the `line` up to the `\n`.
-	- Here is where we declare our `stash` as a `static variable`.
-	- We will also need to include checks to handle errors such as:
-		- invalid file descriptors
-		- the file descriptor is larger than or equal to the maximum number of file descriptors defined (`MAX_FD`)
-		- the `BUFFER_SIZE` is incorrectly set to `0` or less than. 
-		- `read()` returns a negative value indicating an error
-		- memory allocation for `line` fails
+3. Finally, we have our main function `get_next_line()`.
+	- We make it put the `line_read` inside `stash` so we can later go inside `stash` and search for the `\n`.
+	- At some point, we will have:
+		- a complete line up to the `\n` to extract
+		- after which we will have an updated `stash` containing the `leftovers`
+		- if there is more data to read, then we will have a new `line_read`
+	- If there is a new `line_read`, this means we will need to append this to the `stash` for the next search of the `\n`. 
+	- We will need a helper function to append the new `line_read` to the `stash`.
+		- Recall, from our libft library, `ft_strjoin()` creates a new string by allocating memory enough to hold two strings, and concatenates them.
+	- We want to keep calling `get_next_line()` until all the lines are returned, and there is no more lines to read from the `fd`.
+
 
 7. 🔹 Let's write some pseudo code to see how this might all come together:
 	```
 	//Call `get_next_line()` with a file descriptor
-		//Allocate memory for the `line_read` where it will be stored, after `line_read` is retrieved from the `fd`
-		//Check for file descriptor, reading, and memory allocation errors
+		//Declare a static variable `stash` to hold the leftovers after a line is extracted
+		//Declare a variable to store the current data that was read
+		//Declare a variable to store the extracted line in which our function returns
 	
-	//Read `BUFFER_SIZE` bytes from `fd` and return the number of bytes successfully read
-		//Store the bytes read into `line_read`
-		//Properly null terminate `line_read`
-		//Update `stash` as a new string to contain the contents of `line_read`, and the "leftovers" of `stash` (if any)
-		//Free the buffer `line_read` as it's no longer needed
-		
-	//Send the updated `stash` to `ft_get_line()`
-		//Search for a `\n` in `stash`
-			//If no `\n` is found, return a line with `stash` inside it unchanged.
-			//If a `\n` is found, extract the `line` up to the `\n`
-			//Update `stash` to contain its "leftovers"
-		//Return the extracted `line`
+	//Check for file descriptor, BUFFER_SIZE, and read() errors
 
-	//If there is more data to read from `fd`, `get_next_line()` is called again, in a loop
-		//Between subsequent calls in `main()`, after `line` is returned, `line` will need to be freed for the next retrieval
-		//Repeat, until all lines have been read from the `fd` or `fd`s
+	//Account for the first call of the function, where `stash` will be empty. 
+		//Initialise it to an empty string, preparing for an accumulation of characters next read
+
+	//If there is a complete line processed, extract it
+		//Return the line
+
+	//If there is more data to read
+		//Append the new data to the stash
+		//Call `get_next_line()` again. Possibly use recursion.
+	
+	//If there is no more data to read
+		//Return the leftovers from the stash
+		//Calling `get_next_line()` again will return NULL and our work is done
 	```
+
+
+## 🔵 Step 8: Test get_next_line
+
+1. 🔹 Write a main():
+	- Ensure all the headers are included, e.g. `<fcntl.h>` for file descriptor and IO operations; and `<stdio.h>` to call `printf()`.
+	- Call `open()` to open a text file, e.g. `open("test1.txt", 0_RDONLY);`
+	- Use a `while loop` to call our `get_next_line()`, where `read()`` is called
+	- Print the results (the lines returned)
+	- Call `close()` to close the file after it's done its job
+
+2. 🔹 Write some test .txt files
+	- Ensure these files are in the same directory as our `get_next_line()` source files.
+
+3. 🔹 Compile using `cc -Wall -Wextra -Werror -D Buffer_size=5 <files>.c`
+	- Test with a small number of BUFFER_SIZE. 
+	- Test without the -D flag.
+	- Test with francinette.
+
+
+## 😎 All the best, friends! 

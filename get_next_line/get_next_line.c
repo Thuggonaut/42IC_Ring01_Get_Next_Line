@@ -1,44 +1,34 @@
 #include "get_next_line.h"
 
-char *get_next_line(int fd)
-{
-    static char *stash;
-    char *line_read;
-    char *line;
-
-    if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0)
-        return (NULL);
-    if (!stash)
-        stash = ft_strdup("");
-    line = process_line(&stash);
-    if (line)
-        return (line);
-    line_read = read_from_fd(fd);
-    if (!line_read) 
-    {
-        line = ft_strdup(stash);
-        free(stash);
-        stash = NULL;
-        if (*line) 
-            return (line);
-        free(line);
-        return (NULL);
-    }
-    stash = ft_strjoin(stash, line_read);
-    free(line_read);
-    return (get_next_line(fd));
-}
-
-
 char *get_next_line(int fd) //Define a function that takes a file descriptor, and returns a pointer to a character array (the line retrieved) of the current `fd`
 {
-  static char *stash; //Declare a static character pointer to hold the remainder of a line after a newline character is found
-  char *line_read; //Declare a character pointer to hold the current line being read
-  
-  if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0 || (!(line_read = malloc(sizeof(char) * (BUFFER_SIZE + 1))))) //Check for errors. See #1
-    return (NULL); //If any errors, return `NULL`
-  return (ft_line_read(fd, line_read, &stash)); //Returns the result of `ft_line_read()` which is the `line` up to the `\n`. See #2
+    static char *stash; //Declare a static character pointer to hold the remainder of a line after a `\n` is found
+    char *line_read; //Declare a character pointer to hold the current line being read
+    char *line; //Declare a character pointer to store the extracted `line` from `stash` up to the `\n`
+
+    if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0) //Check for errors. See #1
+        return (NULL); //If any errors, return `NULL`
+    if (!stash) //If the stash is not yet allocated (i.e., this is the first call to the function or the previous stash has been freed)
+        stash = ft_strdup(""); //Allocate an empty string and assign it to `stash`. See #2
+    line = process_line(&stash); //Extract a complete line from the stash
+    if (line) //Checks if a complete line is found
+        return (line); //If so, return the complete line. Otherwise, it returns `NULL`, indicating that more data needs to be read from the file descriptor, and proceeds to the next code
+    line_read = read_from_fd(fd); //Allocate memory for the data read, read from the `fd`, then return the data read as `line_read`
+    if (!line_read) //Checks if `line_read` is `NULL`, if so, it means that there is no more data to read from the `fd` (end-of-file or an error occurred)
+    {
+        line = ft_strdup(stash); //Copy the entire `stash` and assign it to `line`. This essentially checks if there is any data left in the stash. If there is data left in the stash, it means the file ended without a `\n`
+        free(stash); //We no longer need the data in `stash` as it's already stored in `line`
+        stash = NULL; //Ensure `stash` does not point to the now-deallocated memory, and become a "dangling pointer". See #3
+        if (*line) //If `line` is not an empty string
+            return (line); //Return the remaining data from the file
+        free(line); //If `line` is an empty string, there is no more data to return. Free `line` and return `NULL`
+        return (NULL); 
+    }
+    stash = ft_strjoin(stash, line_read); //If `line_read` is not `NULL`, it means more data was read from the `fd`. Concatenate the read data with the stash and update `stash` pointer accordingly
+    free(line_read); //Free `line_read` as it's no longer needed
+    return (get_next_line(fd)); //Recursively call itself get_next_line(fd) to continue reading and processing lines from the file descriptor. The process repeats until a complete line is found, or the end-of-file is reached. See #4
 }
+
 
 /*
 TO TEST:
@@ -60,7 +50,6 @@ int main(void)
     while ((line = get_next_line(fd)) != NULL)
     {
         printf("%s\n", line);
-        free(line);
     }
     close(fd);
     return (0);
@@ -68,19 +57,6 @@ int main(void)
 */
 
 /*
-RE `BUFFER_SIZE`:
-    - You can change the buffer size at compilation. When you compile the C source code, the -D option will set a preprocessor macro. 
-    - Compile your code like this, e.g. with buffer size of 42:
-
-        `cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 get_next_line.c get_next_line_utils.c`
-
-    - Then, the `BUFFER_SIZE` macro is given the value '42', and it can be used in your program. 
-            - A `BUFFER_SIZE` of `1` means that you're reading in a file `1` byte at a time, which is very inefficient but can be useful for 
-              testing your program. 
-            - A `BUFFER_SIZE` of `10000000` means you're reading in the file `10000000` bytes at a time, which might be faster but 
-              will use a lot more memory.
-
-
 #1  This line of code checks for several potential error conditions before the program proceeds with reading from the file descriptor. If any of these 
     conditions are true, the function immediately returns `NULL` to indicate an error. Here's a breakdown of each condition:
 
@@ -106,17 +82,26 @@ RE `BUFFER_SIZE`:
         - If `malloc` returns `NULL`, it means that the memory allocation failed.
 
 
-#2  Here's the breakdown of `ft_line_read(fd, line, &stash)`:
+#2  This step is necessary to initialize stash to an empty string, which will be used to accumulate data read from the file descriptor. If stash is already 
+    allocated (i.e., it's not NULL), we don't need to allocate a new empty string.
 
-    1. `fd`: 
-        - This is the file descriptor from which the function will read. It's the same file descriptor that was passed to get_next_line.
 
-    2. `line`: 
-        - This is a pointer to a block of memory that was allocated in `get_next_line()`. 
-        - The `ft_line_read` function will store the line it reads from the file descriptor here.
+#3  A dangling pointer is a pointer that doesn't point to a valid object. 
+    - If you have a pointer pointing to a memory location and that memory location is deallocated (for example, by using 
+      `free()` in C), the pointer is now dangling. 
+    - It's pointing to a memory location that has been freed and can be reused for other purposes.
+    - Setting pointers to `NULL` after freeing the memory they point to, avoids returning pointers to local variables.
+    - Since `get_next_line()` may continue to be called, if `stash` still points to the deallocated memory, it could lead to undefined behavior if the function 
+      attempts to read or modify the memory at that location.
+    - By setting `stash` to `NULL`, we ensure that any subsequent operations that rely on the `stash` being valid will not mistakenly access the freed memory.
 
-    3. `&stash`: 
-        - This is a pointer to the stash variable from `get_next_line()`. 
-        - Since `stash` is a pointer, `&stash` is a pointer to a pointer. 
-        - This allows `ft_line_read()` to modify `stash` to point to any remaining text after the newline character.
+
+#4  When there is no more data to read from the file, the final recursive call will eventually reach a point where it returns `NULL`. 
+    - This is because the `read_from_fd` function returns `NULL` when there is no more data to read from the file descriptor, indicating the end of the file.
+    - This `NULL` value will propagate back through the recursive calls until it reaches the initial call to `get_next_line`, effectively indicating the end 
+      of the file.
+        - The `NULL` return value from `get_next_line` is propagating back to the `line` variable within the while loop of the tester in `main()`. The loop 
+          iterates as long as `get_next_line` returns a `non-NULL` value, indicating that there is more data to read from the file. Once get_next_line returns 
+          `NULL`, the loop stops, and the code after the loop continues.
+        - Recall, in the first iteration, `line = NULL`. 
 */
