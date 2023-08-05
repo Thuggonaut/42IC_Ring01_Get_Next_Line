@@ -26,7 +26,7 @@ char *get_next_line(int fd) //Define a function that takes a file descriptor, an
     }
     stash = ft_strjoin(stash, line_read); //If `line_read` is not `NULL`, it means more data was read from the `fd`. Concatenate the read data with the stash and update `stash` pointer accordingly
     free(line_read); //Free `line_read` as it's no longer needed
-    return (get_next_line(fd)); //Recursively call itself get_next_line(fd) to continue reading and processing lines from the file descriptor. The process repeats until a complete line is found, or the end-of-file is reached. See #4
+    return (get_next_line(fd)); //Recursively call itself `get_next_line(fd)` to continue reading and processing lines from the file descriptor. The process repeats until a complete line is found, or the end-of-file is reached. See #4
 }
 
 

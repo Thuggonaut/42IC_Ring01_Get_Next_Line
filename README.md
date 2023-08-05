@@ -401,7 +401,7 @@ Now that we understand how `get_next_line()` should function, we will need to ha
 	
 	//Check for file descriptor, BUFFER_SIZE, and read() errors
 
-	//Account for the first call of the function, where `stash` will be empty. 
+	//Account for the first call of the function, where `stash` will be empty
 		//Initialise it to an empty string, preparing for an accumulation of characters next read
 
 	//If there is a complete line processed, extract it
@@ -409,7 +409,7 @@ Now that we understand how `get_next_line()` should function, we will need to ha
 
 	//If there is more data to read
 		//Append the new data to the stash
-		//Call `get_next_line()` again. Possibly use recursion.
+		//Call `get_next_line()` again. Possibly use recursion
 	
 	//If there is no more data to read
 		//Return the leftovers from the stash
@@ -421,8 +421,8 @@ Now that we understand how `get_next_line()` should function, we will need to ha
 
 1. 🔹 Write a main():
 	- Ensure all the headers are included, e.g. `<fcntl.h>` for file descriptor and IO operations; and `<stdio.h>` to call `printf()`.
-	- Call `open()` to open a text file, e.g. `open("test1.txt", 0_RDONLY);`
-	- Use a `while loop` to call our `get_next_line()`, where `read()`` is called
+	- Call `open()` to open a text file, e.g. `open("test.txt", 0_RDONLY);`
+	- Use a `while loop` to call our `get_next_line()`, where `read()` is called
 	- Print the results (the lines returned)
 	- Call `close()` to close the file after it's done its job
 
