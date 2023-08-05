@@ -8,7 +8,7 @@
 # endif
 
 char    *ft_substr(char const *s, unsigned int start, size_t len); //Needed to extract from the `stash`, a portion of the string up to the `\n` character, and the remaining portion
-char	*ft_strdup(const char *str); //Needed for opying of strings
+char	*ft_strdup(const char *str); //Needed for copying of strings
 char    *ft_strjoin(char *s1, char *s2); //Needed to join the "leftovers" in `stash` from the previously read `\n`, to the characters next read
 char    *process_line(char **stash); //Needed to process lines read and extract a line up to the `\n`
 char    *read_from_fd(int fd); //Needed to retrieve data read from the file descriptor
