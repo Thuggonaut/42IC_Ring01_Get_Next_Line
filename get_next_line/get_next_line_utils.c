@@ -110,7 +110,7 @@ char *process_line(char **stash) //Define a function that takes a pointer to a s
         len++; //By the end of the loop, `len` will hold the length of the line in `stash` up to the `\n` or the end of the string
     if ((*stash)[len] == '\n') //Check if a `\n` has been encountered at the end of `stash`, if so, perform the below operations
     {
-        line = ft_substr(*stash, 0, len); //Extract the `line` that is up to the `\n`
+        line = ft_substr(*stash, 0, len + 1); //Extract the `line` that is up to the `\n`
         leftovers = ft_substr(*stash, len + 1, ft_strlen(*stash) - (len + 1)); //Extract the remaining chracters from `stash` after the `\n`
         free(*stash); //Now that we've extracted the `line` and `leftovers` portions from `stash` we no longer need this data. This "old stash" needs to be cleaned up for a "new stash"
         *stash = leftovers; //Update the "new stash" to contain only the remaining chracters from `stash`. This will be used by `get_next_line` to append the next line read
