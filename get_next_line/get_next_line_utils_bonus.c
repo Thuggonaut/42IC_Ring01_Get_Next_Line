@@ -73,7 +73,7 @@ char	*ft_strdup(const char *str)
 	len = ft_strlen(str) + 1;
 	dst = ft_calloc(len, sizeof(char));
 	if (dst == NULL) 
-		return NULL;
+		return (NULL);
 	ft_memcpy(dst, str, len);
 	return dst;
 }
