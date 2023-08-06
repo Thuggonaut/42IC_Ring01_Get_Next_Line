@@ -110,7 +110,7 @@ char *process_line(char **stash)
         len++;
     if ((*stash)[len] == '\n') 
     {
-        line = ft_substr(*stash, 0, len);
+        line = ft_substr(*stash, 0, len + 1);
         leftovers = ft_substr(*stash, len + 1, ft_strlen(*stash) - (len + 1));
         free(*stash);
         *stash = leftovers;
