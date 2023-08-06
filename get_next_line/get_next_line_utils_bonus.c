@@ -101,14 +101,17 @@ char *ft_strjoin(char *s1, char *s2)
 
 char *process_line(char **stash) 
 {
-    int len;
+    char *line;
+	char *leftovers;
+	int len;
     len = 0;
+	
     while ((*stash)[len] != '\n' && (*stash)[len] != '\0')
         len++;
     if ((*stash)[len] == '\n') 
     {
-        char *line = ft_substr(*stash, 0, len);
-        char *leftovers = ft_substr(*stash, len + 1, ft_strlen(*stash) - (len + 1));
+        line = ft_substr(*stash, 0, len);
+        leftovers = ft_substr(*stash, len + 1, ft_strlen(*stash) - (len + 1));
         free(*stash);
         *stash = leftovers;
         return (line);
@@ -120,6 +123,7 @@ char *read_from_fd(int fd)
 {
     char *line_read;
     int read_bytes;
+	
     line_read = malloc(sizeof(char) * (BUFFER_SIZE + 1));
     if (!line_read) 
         return (NULL);
