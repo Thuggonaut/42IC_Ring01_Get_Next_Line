@@ -75,7 +75,7 @@ char	*ft_strdup(const char *str)
 	if (dst == NULL) 
 		return (NULL);
 	ft_memcpy(dst, str, len);
-	return dst;
+	return (dst);
 }
 
 char *ft_strjoin(char *s1, char *s2)  
