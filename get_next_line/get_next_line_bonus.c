@@ -95,7 +95,7 @@ RE BONUS PART:
             - This declares `stash` as an array with `MAX_FD` elements. 
             - `MAX_FD` is a constant that represents the maximum number of file descriptors that your program is expected to handle. 
             - Each file descriptor has its own "stash" string, so `stash[fd]` is the `stash` string for file descriptor `fd`.
-        4. So, in summary, `static char *stash[MAX_FD];` declares `stash` as a static array of `MAX_FD` pointers to characters. 
+        4. So, in summary, `static char *stash[MAX_FD];` declares `stash` as a static array of `MAX_FD` file pointers to characters. 
             - Each element of `stash` is a pointer to a string that holds the leftover characters from the last read operation for a 
               particular file descriptor.
 */
