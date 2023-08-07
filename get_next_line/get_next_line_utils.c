@@ -10,30 +10,6 @@ size_t ft_strlen(const char *s) //Define a function that takes a pointer to a st
     return (s - start - 1); //`s` is now pointing to the end of `s`. The resulting length of `s` is calulated by subtracting the final position of `start` of the string (index `0`) from the position of `s`. The `-1` is to account for the extra increment for the `\0`
 }
 
-void *ft_memset(void *ptr, int value, size_t num) //Define a function that takes a pointer to the memory block to be filled, an integer value to set each byte, and a size_t number of bytes to be set to the given value
-{
-    unsigned char *p; //`unsigned char` is declared to ensure that we can access individual bytes of memory, as `unsigned char` allows us to set values in the range of 0 to 255
-
-    p = (unsigned char *)ptr; //Assign the value of the `ptr` parameter
-    while (num > 0) //Loop until `num` becomes `0`, at which point the function has set the specified number of bytes in memory to the given value
-    {
-        *p = (unsigned char)value; //Set the byte to the input value
-        p++; //Move to the next byte in memory for processing
-        num--; //Decremented to track the number of bytes remaining to be set
-    }
-    return (ptr); //Return the original pointer, which now points to the memory block with its content modified
-}
-
-void	*ft_calloc(size_t n, size_t size) //Define a function that takes a `size_t` number of elements to allocate memory for, the size for each element (see #1), and returns a generic pointer to the memory block
-{
-	void	*ptr; //Declare a generic pointer variable that will store a pointer to the memory block later allocated by `malloc()`
-
-	ptr = malloc(n * size); //Assign to `ptr` a memory block 
-	if (ptr != NULL) //If memory allocation is successfull, perform the following operations
-		ft_memset(ptr, 0, n * size); //Initialise the allocated memory block to `0` in all elements. 
-	return ((void *)ptr); //A pointer to the allocated memory block is returned. If allocation was unsuccessfull, `ptr` will be a `NULL` pointer
-}
-
 void	*ft_memcpy(void *dest, const void *src, size_t n) //Define a function that takes a pointer to the destination to be copied be copied, a pointer to the source from which to copy (`const` because we don't want to modify source), and the number of bytes to be copied
 {
 	unsigned char	*d; //Declare pointers used to traverse the destination and source memory blocks
@@ -71,8 +47,8 @@ char	*ft_strdup(const char *str) //Define a function that takes a pointer to a s
 	char	*dst;
 
 	len = ft_strlen(str) + 1; //Assign the length of `str` plus one to accommodate the null terminator in the duplicated string
-	dst = ft_calloc(len, sizeof(char)); //Allocate memory for the duplicated string 
-	if (dst == NULL) //Checks for memory allocation fail
+	dst = (char *)malloc(len * sizeof(char)); //Allocate memory for the duplicated string 
+	if (!dst) //Checks for memory allocation fail
 		return (NULL); //Return `NULL` if so
 	ft_memcpy(dst, str, len); //Copy into `dst`, the contents of `str`
 	return (dst); //Return a pointer to the new dynamically allocated string that is an exact duplicate of the `str`

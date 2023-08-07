@@ -3,11 +3,16 @@
 char *get_next_line(int fd) //Define a function that takes a file descriptor, and returns a pointer to a character array (the line retrieved) of the current `fd`
 {
     static char *stash; //Declare a static character pointer to hold the remainder of a line after a `\n` is found
-    char *line_read; //Declare a character pointer to hold the current line being read
-    char *line; //Declare a character pointer to store the extracted `line` from `stash` up to the `\n`
+    char    *tmp_stash; //Declare a temporary variable in order to update the current stash to the new stash
+    char    *line_read; //Declare a character pointer to hold the current line being read
+    char    *line; //Declare a character pointer to store the extracted `line` from `stash` up to the `\n`
 
     if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0) //Check for errors. See #1
-        return (NULL); //If any errors, return `NULL`
+    {
+		free(stash); //If any errors, free the buffer to prevent memory leaks
+		stash = NULL; //Signal that the memory has been freed and is safe with a clean slate
+	    return (NULL); //Return `NULL`
+	}    
     if (!stash) //If the stash is not yet allocated (i.e., this is the first call to the function or the previous stash has been freed)
         stash = ft_strdup(""); //Allocate an empty string and assign it to `stash`. See #2
     line = process_line(&stash); //Extract a complete line from the stash
@@ -24,7 +29,9 @@ char *get_next_line(int fd) //Define a function that takes a file descriptor, an
         free(line); //If `line` is an empty string, there is no more data to return. Free `line` and return `NULL`
         return (NULL); 
     }
-    stash = ft_strjoin(stash, line_read); //If `line_read` is not `NULL`, it means more data was read from the `fd`. Concatenate the read data with the stash and update `stash` pointer accordingly
+    tmp_stash = ft_strjoin(stash, line_read); //If `line_read` is not `NULL`, it means more data was read from the `fd`. Concatenate the read data with the stash and update `stash` pointer accordingly
+    free(stash); //Free memory before updating the new stash
+    stash = tmp_stash; //Assign to the updated stash, the concatenated data
     free(line_read); //Free `line_read` as it's no longer needed
     return (get_next_line(fd)); //Recursively call itself `get_next_line(fd)` to continue reading and processing lines from the file descriptor. The process repeats until a complete line is found, or the end-of-file is reached. See #4
 }

@@ -85,11 +85,16 @@ char *read_from_fd(int fd)
 char *get_next_line_bonus(int fd)
 {
     static char *stash[MAX_FD];
-    char *line_read;
-    char *line;
+    char    *tmp_stash;
+    char    *line_read;
+    char    *line;
 
-    if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0)
+    if (fd < 0 || fd >= MAX_FD || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0)
+    {
+        free(stash[fd]);
+        stash[fd] = NULL;
         return (NULL);
+    }    
     if (!stash[fd])
         stash[fd] = strdup("");
     line = process_line(&stash[fd]);
@@ -106,7 +111,9 @@ char *get_next_line_bonus(int fd)
         free(line);
         return (NULL);
     }
-    stash[fd] = ft_strjoin(stash[fd], line_read);
+    tmp_stash = ft_strjoin(stash[fd], line_read);
+    free(stash[fd]);
+    stash[fd] = tmp_stash;
     free(line_read);
     return (get_next_line_bonus(fd));
 }

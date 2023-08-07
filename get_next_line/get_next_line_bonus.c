@@ -3,11 +3,16 @@
 char *get_next_line(int fd) 
 {
     static char *stash[MAX_FD]; //Declare an array of static character pointers with `MAX_FD` elements, to hold the remainder of a line corresponding to its `fd`, after a newline character is found. See 4.
-    char *line_read; 
-    char *line; 
+    char    *tmp_stash;    
+    char    *line_read; 
+    char    *line; 
 
     if (fd < 0 || fd >= MAX_FD || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0) //Check for errors. The extra check here is `fd >= MAX_FD`
-        return (NULL); 
+    {
+        free(stash[fd]);
+        stash[fd] = NULL;
+        return (NULL);
+    } 
     if (!stash[fd]) 
         stash[fd] = ft_strdup(""); 
     line = process_line(&stash[fd]); 
@@ -24,7 +29,9 @@ char *get_next_line(int fd)
         free(line);
         return (NULL);
     }
-    stash[fd] = ft_strjoin(stash[fd], line_read);
+    tmp_stash = ft_strjoin(stash[fd], line_read);
+    free(stash[fd]);
+    stash[fd] = tmp_stash;
     free(line_read);
     return (get_next_line(fd));
 }
