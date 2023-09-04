@@ -24,7 +24,7 @@ This project helps us understand more about:
 	- Step 5: [Learn the `-D BUFFER_SIZE` flag](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-5-learn-the--d-buffer_size-flag)
 	- Step 6: [Understand get_next_line](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-6-understand-get_next_line)
 	- Step 7: [Code get_next_line](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-7-code-get_next_line)
-	- Step 8: Test our get_next_line
+	- Step 8: [Test our get_next_line](https://github.com/Thuggonaut/42IC_Ring01_Get_Next_Line/blob/main/README.md#-step-8-test-get_next_line)
 
 
 ## 🔵 The Mandatory part:
