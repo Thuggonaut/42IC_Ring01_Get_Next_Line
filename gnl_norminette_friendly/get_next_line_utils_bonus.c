@@ -22,18 +22,18 @@ size_t	ft_strlen(const char *s)
 	return (s - start - 1);
 }
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
 	unsigned char	*d;
 	unsigned char	*s;
 
-	d = (unsigned char *)dest;
+	d = (unsigned char *)dst;
 	s = (unsigned char *)src;
-	if (!dest && !src)
+	if (!dst && !src)
 		return (NULL);
 	while (n--)
 		*d++ = *s++;
-	return (dest);
+	return (dst);
 }
 
 char	*ft_strdup(const char *str)

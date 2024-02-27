@@ -10,18 +10,18 @@ size_t ft_strlen(const char *s) //Define a function that takes a pointer to a st
     return (s - start - 1); //`s` is now pointing to the end of `s`. The resulting length of `s` is calulated by subtracting the final position of `start` of the string (index `0`) from the position of `s`. The `-1` is to account for the extra increment for the `\0`
 }
 
-void	*ft_memcpy(void *dest, const void *src, size_t n) //Define a function that takes a pointer to the destination to be copied be copied, a pointer to the source from which to copy (`const` because we don't want to modify source), and the number of bytes to be copied
+void	*ft_memcpy(void *dst, const void *src, size_t n) //Define a function that takes a pointer to the destination to be copied be copied, a pointer to the source from which to copy (`const` because we don't want to modify source), and the number of bytes to be copied
 {
 	unsigned char	*d; //Declare pointers used to traverse the destination and source memory blocks
 	unsigned char	*s; //`unsigned char*` allows us to work with individual bytes rather than entire data types, which makes it easier to manipulate memory
 
-	d = (unsigned char *)dest;
+	d = (unsigned char *)dst;
 	s = (unsigned char *)src;
-	if (!dest && !src) //Checks for valid pointers
+	if (!dst && !src) //Checks for valid pointers
 		return (NULL); //If either is `NULL`, it means there is no valid memory location to copy data from or to, so the function returns `NULL`
 	while (n--) //Loop `n` times
-		*d++ = *s++; //Copy one byte at a time from the `src` to the `dest` memory locations. Post increment each iteration to move to the next chracters for copying
-	return (dest); //Return the original `dest` pointer which will have the contents of `src`
+		*d++ = *s++; //Copy one byte at a time from the `src` to the `dst` memory locations. Post increment each iteration to move to the next chracters for copying
+	return (dst); //Return the original `dest` pointer which will have the contents of `src`
 }
 
 char *ft_substr(char const *s, unsigned int start, size_t len) //Define a function that takes a pointer to a string, an integer representing the starting index from where to copy, the length of characters to copy, and returns a pointer to the extracted string
